@@ -213,16 +213,20 @@ class ScoreController extends Controller
                 ->sortByDesc('average_score')
                 ->values();
         } else {
-            // Get overall rankings
+            // Get overall rankings - force fresh calculation
             $candidates = $query->get()
                 ->map(function ($candidate) {
+                    // Force fresh calculation by calling methods directly
+                    $scoresBreakdown = $candidate->getScoresBreakdown();
+                    $totalScore = $candidate->getTotalScore();
+                    
                     return [
                         'candidate' => $candidate,
-                        'total_score' => $candidate->getTotalScore(),
-                        'scores_breakdown' => $candidate->getScoresBreakdown()
+                        'overall_total' => $totalScore,
+                        'scores_breakdown' => $scoresBreakdown
                     ];
                 })
-                ->sortByDesc('total_score')
+                ->sortByDesc('overall_total')
                 ->values();
         }
 

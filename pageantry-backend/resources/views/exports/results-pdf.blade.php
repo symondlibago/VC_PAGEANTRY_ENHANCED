@@ -114,7 +114,7 @@
                         <td class="score">{{ number_format($result['swimsuit'], 2) }}</td>
                         <td class="score">{{ number_format($result['gown'], 2) }}</td>
                         <td class="score">{{ number_format($result['qa'], 2) }}</td>
-                        <td class="score">{{ number_format($result['total'], 2) }}</td>
+                        <td class="score">{{ number_format($result['overall_total'], 2) }}</td>
                     @else
                         <td class="score">{{ number_format($result['score'], 2) }}</td>
                     @endif

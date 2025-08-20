@@ -37,11 +37,11 @@ const CategoryVotingPage = ({ category, onBack }) => {
   const [message, setMessage] = useState('');
 
   const categories = {
-    sports_attire: { name: 'Sports Attire', weight: '20%', icon: Trophy, color: 'bg-blue-600' },
-    swimsuit: { name: 'Swimsuit', weight: '20%', icon: Star, color: 'bg-red-600' },
-    talent: { name: 'Talent', weight: '10%', icon: Star, color: 'bg-yellow-600' },
-    gown: { name: 'Gown', weight: '20%', icon: Crown, color: 'bg-purple-600' },
-    qa: { name: 'Q&A', weight: '30%', icon: User, color: 'bg-green-600' },
+    sports_attire: { name: 'Sports Attire', icon: Trophy, color: 'bg-blue-600' },
+    swimsuit: { name: 'Swimsuit', icon: Star, color: 'bg-red-600' },
+    talent: { name: 'Talent', icon: Star, color: 'bg-yellow-600' },
+    gown: { name: 'Gown', icon: Crown, color: 'bg-purple-600' },
+    qa: { name: 'Q&A', icon: User, color: 'bg-green-600' },
   };
 
   // Sub-category definitions with weights
@@ -332,7 +332,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
                   </Badge>
                   <h2 className="text-4xl font-bold mb-2 text-white">{currentCandidate.name}</h2>
                   <p className="text-xl text-blue-200">
-                    {currentCategory.name} Category ({currentCategory.weight})
+                    {currentCategory.name} Category
                   </p>
                 </div>
 

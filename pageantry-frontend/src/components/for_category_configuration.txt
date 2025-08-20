@@ -8,3 +8,5 @@ export controller
 admin dashboard
 category for voting
 judge dashboard
+
+results-pdf.blade.php

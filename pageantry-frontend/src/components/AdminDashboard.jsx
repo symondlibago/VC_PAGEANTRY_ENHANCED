@@ -98,7 +98,8 @@ const AdminDashboard = () => {
       'swimsuit': 'top_swimsuit',
       'talent': 'top_talent',
       'gown': 'top_gown',
-      'qa': 'top_qa'
+      'qa': 'top_qa',
+      'combined_categories': 'combined_categories'
     };
     return filterMapping[frontendFilter] || 'overall';
   };
@@ -111,7 +112,8 @@ const AdminDashboard = () => {
       'swimsuit': 'Swimsuit Results',
       'talent': 'Talent Results',
       'gown': 'Gown Results',
-      'qa': 'Q&A Results'
+      'qa': 'Q&A Results',
+      'combined_categories': 'Combined Categories Results'
     };
     return displayNames[filter] || 'Overall Results';
   };
@@ -602,8 +604,8 @@ const AdminDashboard = () => {
                           {formatScore(candidate.scores?.qa)}
                         </TableCell>
                         <TableCell className="font-bold">
-                          <span className={getScoreColor(candidate.scores?.total)}>
-                            {formatScore(candidate.scores?.total)}
+                          <span className={getScoreColor(candidate.scores?.overall_total)}>
+                            {formatScore(candidate.scores?.overall_total)}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -836,6 +838,19 @@ const AdminDashboard = () => {
                           <Download className="h-4 w-4 mr-2" />
                           All Categories (Excel)
                         </DropdownMenuItem>
+                        
+                        <DropdownMenuSeparator />
+                        <DropdownMenuLabel>Export Combined Categories</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        
+                        <DropdownMenuItem onClick={() => handleExportSpecific('pdf', 'combined_categories')}>
+                          <Download className="h-4 w-4 mr-2" />
+                          Combined Categories (PDF)
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleExportSpecific('excel', 'combined_categories')}>
+                          <Download className="h-4 w-4 mr-2" />
+                          Combined Categories (Excel)
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
@@ -919,8 +934,8 @@ const AdminDashboard = () => {
                             <TableCell className={getScoreColor(item.scores_breakdown?.talent)}>{formatScore(item.scores_breakdown?.talent)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.gown)}>{formatScore(item.scores_breakdown?.gown)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.qa)}>{formatScore(item.scores_breakdown?.qa)}</TableCell>
-                            <TableCell className={`font-bold ${getScoreColor(item.total_score)}`}>
-                              {formatScore(item.total_score)}
+                            <TableCell className={`font-bold ${getScoreColor(item.overall_total)}`}>
+                              {formatScore(item.overall_total)}
                             </TableCell>
                           </>
                         ) : (

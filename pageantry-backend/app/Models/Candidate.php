@@ -45,13 +45,18 @@ class Candidate extends Model
      */
     public function getTotalScore(): float
     {
-        $sportsAttire = $this->getAverageScore('sports_attire') * 0.20;
-        $swimsuit = $this->getAverageScore('swimsuit') * 0.20;
-        $talent = $this->getAverageScore('talent') * 0.10;
-        $gown = $this->getAverageScore('gown') * 0.20;
-        $qa = $this->getAverageScore('qa') * 0.30;
+        $sportsAttire = $this->getAverageScore('sports_attire');
+        $swimsuit = $this->getAverageScore('swimsuit');
+        $talent = $this->getAverageScore('talent');
+        $gown = $this->getAverageScore('gown');
 
-        return $sportsAttire + $swimsuit + $talent + $gown + $qa;
+        $categoriesCount = 0;
+        if ($sportsAttire > 0) $categoriesCount++;
+        if ($swimsuit > 0) $categoriesCount++;
+        if ($talent > 0) $categoriesCount++;
+        if ($gown > 0) $categoriesCount++;
+
+        return $categoriesCount > 0 ? ($sportsAttire + $swimsuit + $talent + $gown) / $categoriesCount : 0;
     }
 
     /**
@@ -65,7 +70,7 @@ class Candidate extends Model
             'talent' => $this->getAverageScore('talent'),
             'gown' => $this->getAverageScore('gown'),
             'qa' => $this->getAverageScore('qa'),
-            'total' => $this->getTotalScore()
+            'overall_total' => $this->getTotalScore()
         ];
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Candidate;
-use App\Models\Score;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -16,10 +16,32 @@ class ExportController extends Controller
      */
     public function exportExcel(Request $request)
     {
-        $filter = $request->get('filter', 'overall');
-        $gender = $request->get('gender', 'all');
-        
-        return Excel::download(new ResultsExport($filter, $gender), 'pageant-results.xlsx');
+        try {
+            $filter = $request->get("filter", "overall");
+            $gender = $request->get("gender", "all");
+
+            // Basic allow-list validation
+            $allowed = [
+                "overall",
+                "top_gown",
+                "top_swimsuit",
+                "top_talent",
+                "top_qa",
+                "top_sports_attire",
+                "combined_categories"
+            ];
+            if (!in_array($filter, $allowed, true)) {
+                $filter = "overall";
+            }
+
+            return Excel::download(new ResultsExport($filter, $gender), "pageant-results.xlsx");
+        } catch (\Throwable $e) {
+            Log::error("Excel export failed", ["error" => $e->getMessage(), "trace" => $e->getTraceAsString()]);
+            return response()->json([
+                "message" => "Failed to generate Excel export",
+                "error" => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -27,113 +49,172 @@ class ExportController extends Controller
      */
     public function exportPdf(Request $request)
     {
-        $filter = $request->get('filter', 'overall');
-        $gender = $request->get('gender', 'all');
-        $data = $this->getResultsData($filter, $gender);
+        try {
+            $filter = $request->get("filter", "overall");
+            $gender = $request->get("gender", "all");
 
-        $pdf = Pdf::loadView('exports.results-pdf', $data);
-        
-        return $pdf->download('pageant-results.pdf');
+            // Basic allow-list validation
+            $allowed = [
+                "overall",
+                "top_gown",
+                "top_swimsuit",
+                "top_talent",
+                "top_qa",
+                "top_sports_attire",
+                "combined_categories"
+            ];
+            if (!in_array($filter, $allowed, true)) {
+                $filter = "overall";
+            }
+
+            $data = $this->getResultsData($filter, $gender);
+
+            $pdf = Pdf::loadView("exports.results-pdf", $data);
+            return $pdf->download("pageant-results.pdf");
+        } catch (\Throwable $e) {
+            Log::error("PDF export failed", ["error" => $e->getMessage(), "trace" => $e->getTraceAsString()]);
+            return response()->json([
+                "message" => "Failed to generate PDF export",
+                "error" => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
      * Get results data based on filter and gender
      */
-    private function getResultsData(string $filter, string $gender = 'all'): array
+    private function getResultsData(string $filter, string $gender = "all"): array
     {
-        $candidatesQuery = Candidate::where('is_active', true);
+        $candidatesQuery = Candidate::where("is_active", true);
 
-        if ($gender !== 'all') {
-            $candidatesQuery->where('gender', $gender);
+        if ($gender !== "all") {
+            $candidatesQuery->where("gender", $gender);
         }
 
         $candidates = $candidatesQuery->get();
 
         switch ($filter) {
-            case 'top_gown':
+            case "top_gown":
                 $results = $candidates->map(function ($candidate) {
                     return [
-                        'candidate' => $candidate,
-                        'score' => $candidate->getAverageScore('gown')
+                        "candidate" => $candidate,
+                        "score" => (float) $candidate->getAverageScore("gown"),
                     ];
-                })->sortByDesc('score')->values();
-                $title = 'Top Gown Results';
+                })->sortByDesc("score")->values();
+                $title = "Top Gown Results";
                 break;
 
-            case 'top_swimsuit':
+            case "top_swimsuit":
                 $results = $candidates->map(function ($candidate) {
                     return [
-                        'candidate' => $candidate,
-                        'score' => $candidate->getAverageScore('swimsuit')
+                        "candidate" => $candidate,
+                        "score" => (float) $candidate->getAverageScore("swimsuit"),
                     ];
-                })->sortByDesc('score')->values();
-                $title = 'Top Swimsuit Results';
+                })->sortByDesc("score")->values();
+                $title = "Top Swimsuit Results";
                 break;
 
-            case 'top_talent':
+            case "top_talent":
                 $results = $candidates->map(function ($candidate) {
                     return [
-                        'candidate' => $candidate,
-                        'score' => $candidate->getAverageScore('talent')
+                        "candidate" => $candidate,
+                        "score" => (float) $candidate->getAverageScore("talent"),
                     ];
-                })->sortByDesc('score')->values();
-                $title = 'Top Talent Results';
+                })->sortByDesc("score")->values();
+                $title = "Top Talent Results";
                 break;
 
-            case 'top_qa':
+            case "top_qa":
                 $results = $candidates->map(function ($candidate) {
                     return [
-                        'candidate' => $candidate,
-                        'score' => $candidate->getAverageScore('qa')
+                        "candidate" => $candidate,
+                        "score" => (float) $candidate->getAverageScore("qa"),
                     ];
-                })->sortByDesc('score')->values();
-                $title = 'Top Q&A Results';
+                })->sortByDesc("score")->values();
+                $title = "Top Q&A Results";
                 break;
 
-            case 'top_sports_attire':
+            case "top_sports_attire":
                 $results = $candidates->map(function ($candidate) {
                     return [
-                        'candidate' => $candidate,
-                        'score' => $candidate->getAverageScore('sports_attire')
+                        "candidate" => $candidate,
+                        "score" => (float) $candidate->getAverageScore("sports_attire"),
                     ];
-                })->sortByDesc('score')->values();
-                $title = 'Top Sports Attire Results';
+                })->sortByDesc("score")->values();
+                $title = "Top Sports Attire Results";
                 break;
 
-            default: // overall
+            case "overall":
+            default:
                 $results = $candidates->map(function ($candidate) {
                     $breakdown = $candidate->getScoresBreakdown();
                     return [
-                        'candidate' => $candidate,
-                        'sports_attire' => $breakdown['sports_attire'],
-                        'swimsuit' => $breakdown['swimsuit'],
-                        'talent' => $breakdown['talent'],
-                        'gown' => $breakdown['gown'],
-                        'qa' => $breakdown['qa'],
-                        'total' => $breakdown['total']
+                        "candidate" => $candidate,
+                        "sports_attire" => (float) $breakdown["sports_attire"],
+                        "swimsuit" => (float) $breakdown["swimsuit"],
+                        "talent" => (float) $breakdown["talent"],
+                        "gown" => (float) $breakdown["gown"],
+                        "qa" => (float) $breakdown["qa"],
+                        "overall_total" => (float) $breakdown["overall_total"],
                     ];
-                })->sortByDesc('total')->values();
-                $title = 'Overall Results';
+                })->sortByDesc("overall_total")->values();
+                $title = "Overall Results";
+                break;
+
+            case "combined_categories":
+                $results = $candidates->map(function ($candidate) {
+                    $breakdown = $candidate->getScoresBreakdown();
+                    return [
+                        "candidate" => $candidate,
+                        "sports_attire" => (float) ($breakdown["sports_attire"] ?? 0),
+                        "swimsuit" => (float) ($breakdown["swimsuit"] ?? 0),
+                        "talent" => (float) ($breakdown["talent"] ?? 0),
+                        "gown" => (float) ($breakdown["gown"] ?? 0),
+                        "combined_total" => (float) (
+                            ($breakdown["sports_attire"] ?? 0) +
+                            ($breakdown["swimsuit"] ?? 0) +
+                            ($breakdown["talent"] ?? 0) +
+                            ($breakdown["gown"] ?? 0)
+                        ),
+                    ];
+                })->sortByDesc("combined_total")->values();
+                $title = "Combined Categories Results";
                 break;
         }
 
-        // Add gender suffix to title if filtering by gender
-        if ($gender !== 'all') {
-            $title .= ' (' . ucfirst($gender) . ' Only)';
+        // For overall filter, ensure all score categories are present for each candidate
+        if ($filter === 'overall') {
+            $results = $results->map(function ($item) {
+                $candidate = $item['candidate'];
+                $breakdown = $candidate->getScoresBreakdown();
+                return [
+                    'candidate' => $candidate,
+                    'sports_attire' => (float) ($breakdown['sports_attire'] ?? 0),
+                    'swimsuit' => (float) ($breakdown['swimsuit'] ?? 0),
+                    'talent' => (float) ($breakdown['talent'] ?? 0),
+                    'gown' => (float) ($breakdown['gown'] ?? 0),
+                    'qa' => (float) ($breakdown['qa'] ?? 0),
+                    'overall_total' => (float) ($breakdown['overall_total'] ?? 0),
+                ];
+            });
+        }
+
+        if ($gender !== "all") {
+            $title .= " (" . ucfirst($gender) . " Only)";
         }
 
         return [
-            'title' => $title,
-            'filter' => $filter,
-            'gender' => $gender,
-            'results' => $results,
-            'generated_at' => now()->format('Y-m-d H:i:s')
+            "title" => $title,
+            "filter" => $filter,
+            "gender" => $gender,
+            "results" => $results,
+            "generated_at" => now()->format("Y-m-d H:i:s"),
         ];
     }
 }
 
 // Excel Export Class
-class ResultsExport implements \Maatwebsite\Excel\Concerns\FromCollection, 
+class ResultsExport implements \Maatwebsite\Excel\Concerns\FromCollection,
                               \Maatwebsite\Excel\Concerns\WithHeadings,
                               \Maatwebsite\Excel\Concerns\WithStyles,
                               \Maatwebsite\Excel\Concerns\WithTitle
@@ -141,7 +222,7 @@ class ResultsExport implements \Maatwebsite\Excel\Concerns\FromCollection,
     private string $filter;
     private string $gender;
 
-    public function __construct(string $filter, string $gender = 'all')
+    public function __construct(string $filter, string $gender = "all")
     {
         $this->filter = $filter;
         $this->gender = $gender;
@@ -149,121 +230,185 @@ class ResultsExport implements \Maatwebsite\Excel\Concerns\FromCollection,
 
     public function collection()
     {
-        $candidatesQuery = Candidate::where('is_active', true);
-
-        if ($this->gender !== 'all') {
-            $candidatesQuery->where('gender', $this->gender);
+        $candidatesQuery = Candidate::where("is_active", true);
+        if ($this->gender !== "all") {
+            $candidatesQuery->where("gender", $this->gender);
         }
-
         $candidates = $candidatesQuery->get();
 
         switch ($this->filter) {
-            case 'top_gown':
-                return $candidates->map(function ($candidate, $index) {
+            case "top_gown":
+                $rows = $candidates->map(function ($candidate) {
                     return [
-                        'rank' => $index + 1,
-                        'candidate_number' => $candidate->candidate_number,
-                        'name' => $candidate->name,
-                        'gender' => ucfirst($candidate->gender),
-                        'gown_score' => number_format($candidate->getAverageScore('gown'), 2)
+                        "candidate_number" => $candidate->candidate_number,
+                        "name" => $candidate->name,
+                        "gender" => ucfirst($candidate->gender),
+                        "score" => (float) $candidate->getAverageScore("gown"),
                     ];
-                })->sortByDesc('gown_score')->values();
+                })->sortByDesc("score")->values();
+                break;
 
-            case 'top_swimsuit':
-                return $candidates->map(function ($candidate, $index) {
+            case "top_swimsuit":
+                $rows = $candidates->map(function ($candidate) {
                     return [
-                        'rank' => $index + 1,
-                        'candidate_number' => $candidate->candidate_number,
-                        'name' => $candidate->name,
-                        'gender' => ucfirst($candidate->gender),
-                        'swimsuit_score' => number_format($candidate->getAverageScore('swimsuit'), 2)
+                        "candidate_number" => $candidate->candidate_number,
+                        "name" => $candidate->name,
+                        "gender" => ucfirst($candidate->gender),
+                        "score" => (float) $candidate->getAverageScore("swimsuit"),
                     ];
-                })->sortByDesc('swimsuit_score')->values();
+                })->sortByDesc("score")->values();
+                break;
 
-            case 'top_talent':
-                return $candidates->map(function ($candidate, $index) {
+            case "top_talent":
+                $rows = $candidates->map(function ($candidate) {
                     return [
-                        'rank' => $index + 1,
-                        'candidate_number' => $candidate->candidate_number,
-                        'name' => $candidate->name,
-                        'gender' => ucfirst($candidate->gender),
-                        'talent_score' => number_format($candidate->getAverageScore('talent'), 2)
+                        "candidate_number" => $candidate->candidate_number,
+                        "name" => $candidate->name,
+                        "gender" => ucfirst($candidate->gender),
+                        "score" => (float) $candidate->getAverageScore("talent"),
                     ];
-                })->sortByDesc('talent_score')->values();
+                })->sortByDesc("score")->values();
+                break;
 
-            case 'top_qa':
-                return $candidates->map(function ($candidate, $index) {
+            case "top_qa":
+                $rows = $candidates->map(function ($candidate) {
                     return [
-                        'rank' => $index + 1,
-                        'candidate_number' => $candidate->candidate_number,
-                        'name' => $candidate->name,
-                        'gender' => ucfirst($candidate->gender),
-                        'qa_score' => number_format($candidate->getAverageScore('qa'), 2)
+                        "candidate_number" => $candidate->candidate_number,
+                        "name" => $candidate->name,
+                        "gender" => ucfirst($candidate->gender),
+                        "score" => (float) $candidate->getAverageScore("qa"),
                     ];
-                })->sortByDesc('qa_score')->values();
+                })->sortByDesc("score")->values();
+                break;
 
-            case 'top_sports_attire':
-                return $candidates->map(function ($candidate, $index) {
+            case "top_sports_attire":
+                $rows = $candidates->map(function ($candidate) {
                     return [
-                        'rank' => $index + 1,
-                        'candidate_number' => $candidate->candidate_number,
-                        'name' => $candidate->name,
-                        'gender' => ucfirst($candidate->gender),
-                        'sports_attire_score' => number_format($candidate->getAverageScore('sports_attire'), 2)
+                        "candidate_number" => $candidate->candidate_number,
+                        "name" => $candidate->name,
+                        "gender" => ucfirst($candidate->gender),
+                        "score" => (float) $candidate->getAverageScore("sports_attire"),
                     ];
-                })->sortByDesc('sports_attire_score')->values();
+                })->sortByDesc("score")->values();
+                break;
 
-            default: // overall
-                return $candidates->map(function ($candidate, $index) {
-                    $breakdown = $candidate->getScoresBreakdown();
+            case "overall":
+            default:
+                $rows = $candidates->map(function ($candidate) {
+                    $b = $candidate->getScoresBreakdown();
                     return [
-                        'rank' => $index + 1,
-                        'candidate_number' => $candidate->candidate_number,
-                        'name' => $candidate->name,
-                        'gender' => ucfirst($candidate->gender),
-                        'sports_attire' => number_format($breakdown['sports_attire'], 2),
-                        'swimsuit' => number_format($breakdown['swimsuit'], 2),
-                        'talent' => number_format($breakdown['talent'], 2),
-                        'gown' => number_format($breakdown['gown'], 2),
-                        'qa' => number_format($breakdown['qa'], 2),
-                        'total' => number_format($breakdown['total'], 2)
+                        "candidate_number" => $candidate->candidate_number,
+                        "name" => $candidate->name,
+                        "gender" => ucfirst($candidate->gender),
+                        "sports_attire" => (float) $b["sports_attire"],
+                        "swimsuit" => (float) $b["swimsuit"],
+                        "talent" => (float) $b["talent"],
+                        "gown" => (float) $b["gown"],
+                        "qa" => (float) $b["qa"],
+                        "overall_total" => (float) $b["overall_total"],
                     ];
-                })->sortByDesc('total')->values();
+                })->sortByDesc("overall_total")->values();
+                break;
+
+            case "combined_categories":
+                $rows = $candidates->map(function ($candidate) {
+                    $b = $candidate->getScoresBreakdown();
+                    return [
+                        "candidate_number" => $candidate->candidate_number,
+                        "name" => $candidate->name,
+                        "gender" => ucfirst($candidate->gender),
+                        "sports_attire" => (float) ($b["sports_attire"] ?? 0),
+                        "swimsuit" => (float) ($b["swimsuit"] ?? 0),
+                        "talent" => (float) ($b["talent"] ?? 0),
+                        "gown" => (float) ($b["gown"] ?? 0),
+                        "combined_total" => (float) (
+                            ($b["sports_attire"] ?? 0) +
+                            ($b["swimsuit"] ?? 0) +
+                            ($b["talent"] ?? 0) +
+                            ($b["gown"] ?? 0)
+                        ),
+                    ];
+                })->sortByDesc("combined_total")->values();
+                break;
         }
+
+        // Add rank and apply formatting at the end
+        $withRank = $rows->values()->map(function ($row, $index) {
+            $ranked = [
+                "rank" => $index + 1,
+                "candidate_number" => $row["candidate_number"],
+                "name" => $row["name"],
+                "gender" => $row["gender"],
+            ];
+
+            if ($this->filter === "overall") {
+                $ranked["sports_attire"] = number_format($row["sports_attire"], 2);
+                $ranked["swimsuit"] = number_format($row["swimsuit"], 2);
+                $ranked["talent"] = number_format($row["talent"], 2);
+                $ranked["gown"] = number_format($row["gown"], 2);
+                $ranked["qa"] = number_format($row["qa"], 2);
+                $ranked["overall_total"] = number_format($row["overall_total"], 2);
+            } elseif ($this->filter === "combined_categories") {
+                $ranked["sports_attire"] = number_format($row["sports_attire"], 2);
+                $ranked["swimsuit"] = number_format($row["swimsuit"], 2);
+                $ranked["talent"] = number_format($row["talent"], 2);
+                $ranked["gown"] = number_format($row["gown"], 2);
+                $ranked["combined_total"] = number_format($row["combined_total"], 2);
+            } else {
+                $ranked_label = match ($this->filter) {
+                    "top_gown" => "gown_score",
+                    "top_swimsuit" => "swimsuit_score",
+                    "top_talent" => "talent_score",
+                    "top_qa" => "qa_score",
+                    "top_sports_attire" => "sports_attire_score",
+                    default => "score",
+                };
+                $ranked[$ranked_label] = number_format($row["score"], 2);
+            }
+
+            return $ranked;
+        });
+
+        return $withRank;
     }
 
     public function headings(): array
     {
         switch ($this->filter) {
-            case 'top_gown':
-                return ['Rank', 'Candidate #', 'Name', 'Gender', 'Gown Score'];
-            case 'top_swimsuit':
-                return ['Rank', 'Candidate #', 'Name', 'Gender', 'Swimsuit Score'];
-            case 'top_talent':
-                return ['Rank', 'Candidate #', 'Name', 'Gender', 'Talent Score'];
-            case 'top_qa':
-                return ['Rank', 'Candidate #', 'Name', 'Gender', 'Q&A Score'];
-            case 'top_sports_attire':
-                return ['Rank', 'Candidate #', 'Name', 'Gender', 'Sports Attire Score'];
+            case "top_gown":
+                return ["Rank", "Candidate #", "Name", "Gender", "Gown Score"];
+            case "top_swimsuit":
+                return ["Rank", "Candidate #", "Name", "Gender", "Swimsuit Score"];
+            case "top_talent":
+                return ["Rank", "Candidate #", "Name", "Gender", "Talent Score"];
+            case "top_qa":
+                return ["Rank", "Candidate #", "Name", "Gender", "Q&A Score"];
+            case "top_sports_attire":
+                return ["Rank", "Candidate #", "Name", "Gender", "Sports Attire Score"];
+            case "combined_categories":
+                return ["Rank", "Candidate #", "Name", "Gender", "Sports Attire", "Swimsuit", "Talent", "Gown", "Combined Total"];
+            case "overall":
             default:
-                return ['Rank', 'Candidate #', 'Name', 'Gender', 'Sports Attire (20%)', 'Swimsuit (20%)', 'Talent (10%)', 'Gown (20%)', 'Q&A (30%)', 'Total'];
+                return ["Rank", "Candidate #", "Name", "Gender", "Sports Attire (20%)", "Swimsuit (20%)", "Talent (10%)", "Gown (20%)", "Q&A (30%)", "Total"];
         }
     }
 
     public function styles(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $sheet)
     {
         return [
-            1 => ['font' => ['bold' => true]],
+            1 => ["font" => ["bold" => true]],
         ];
     }
 
     public function title(): string
     {
-        $title = 'Pageant Results';
-        if ($this->gender !== 'all') {
-            $title .= ' (' . ucfirst($this->gender) . ')';
+        $title = "Pageant Results";
+        if ($this->gender !== "all") {
+            $title .= " (" . ucfirst($this->gender) . ")";
         }
         return $title;
     }
 }
+
+
 
