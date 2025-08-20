@@ -1,0 +1,736 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.625rem;
+  /* Pageantry Color Scheme: Electric Blue, Maroon, Electric Red, White, Black */
+  --background: oklch(1 0 0); /* White */
+  --foreground: oklch(0 0 0); /* Black */
+  --card: oklch(1 0 0); /* White */
+  --card-foreground: oklch(0 0 0); /* Black */
+  --popover: oklch(1 0 0); /* White */
+  --popover-foreground: oklch(0 0 0); /* Black */
+  --primary: oklch(0.55 0.25 240); /* Electric Blue */
+  --primary-foreground: oklch(1 0 0); /* White */
+  --secondary: oklch(0.3 0.15 20); /* Maroon */
+  --secondary-foreground: oklch(1 0 0); /* White */
+  --muted: oklch(0.95 0 0); /* Light Gray */
+  --muted-foreground: oklch(0.4 0 0); /* Dark Gray */
+  --accent: oklch(0.6 0.3 15); /* Electric Red */
+  --accent-foreground: oklch(1 0 0); /* White */
+  --destructive: oklch(0.6 0.3 15); /* Electric Red */
+  --border: oklch(0.9 0 0); /* Light Gray */
+  --input: oklch(0.98 0 0); /* Very Light Gray */
+  --ring: oklch(0.55 0.25 240); /* Electric Blue */
+  --chart-1: oklch(0.55 0.25 240); /* Electric Blue */
+  --chart-2: oklch(0.6 0.3 15); /* Electric Red */
+  --chart-3: oklch(0.3 0.15 20); /* Maroon */
+  --chart-4: oklch(0 0 0); /* Black */
+  --chart-5: oklch(0.7 0 0); /* Gray */
+  --sidebar: oklch(0.98 0 0); /* Very Light Gray */
+  --sidebar-foreground: oklch(0 0 0); /* Black */
+  --sidebar-primary: oklch(0.55 0.25 240); /* Electric Blue */
+  --sidebar-primary-foreground: oklch(1 0 0); /* White */
+  --sidebar-accent: oklch(0.95 0 0); /* Light Gray */
+  --sidebar-accent-foreground: oklch(0 0 0); /* Black */
+  --sidebar-border: oklch(0.9 0 0); /* Light Gray */
+  --sidebar-ring: oklch(0.55 0.25 240); /* Electric Blue */
+}
+
+.dark {
+  --background: oklch(0.05 0 0); /* Very Dark Gray */
+  --foreground: oklch(1 0 0); /* White */
+  --card: oklch(0.1 0 0); /* Dark Gray */
+  --card-foreground: oklch(1 0 0); /* White */
+  --popover: oklch(0.1 0 0); /* Dark Gray */
+  --popover-foreground: oklch(1 0 0); /* White */
+  --primary: oklch(0.65 0.25 240); /* Brighter Electric Blue */
+  --primary-foreground: oklch(0 0 0); /* Black */
+  --secondary: oklch(0.4 0.15 20); /* Lighter Maroon */
+  --secondary-foreground: oklch(1 0 0); /* White */
+  --muted: oklch(0.15 0 0); /* Dark Gray */
+  --muted-foreground: oklch(0.7 0 0); /* Light Gray */
+  --accent: oklch(0.7 0.3 15); /* Brighter Electric Red */
+  --accent-foreground: oklch(0 0 0); /* Black */
+  --destructive: oklch(0.7 0.3 15); /* Brighter Electric Red */
+  --border: oklch(0.2 0 0); /* Dark Gray */
+  --input: oklch(0.15 0 0); /* Dark Gray */
+  --ring: oklch(0.65 0.25 240); /* Brighter Electric Blue */
+  --chart-1: oklch(0.65 0.25 240); /* Brighter Electric Blue */
+  --chart-2: oklch(0.7 0.3 15); /* Brighter Electric Red */
+  --chart-3: oklch(0.4 0.15 20); /* Lighter Maroon */
+  --chart-4: oklch(1 0 0); /* White */
+  --chart-5: oklch(0.8 0 0); /* Light Gray */
+  --sidebar: oklch(0.1 0 0); /* Dark Gray */
+  --sidebar-foreground: oklch(1 0 0); /* White */
+  --sidebar-primary: oklch(0.65 0.25 240); /* Brighter Electric Blue */
+  --sidebar-primary-foreground: oklch(0 0 0); /* Black */
+  --sidebar-accent: oklch(0.15 0 0); /* Dark Gray */
+  --sidebar-accent-foreground: oklch(1 0 0); /* White */
+  --sidebar-border: oklch(0.2 0 0); /* Dark Gray */
+  --sidebar-ring: oklch(0.65 0.25 240); /* Brighter Electric Blue */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Custom animations for pageantry system */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-blue {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.5s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalBackdropFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes alertSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown 0.4s ease-out;
+}
+
+.animate-modal-backdrop {
+  animation: modalBackdropFadeIn 0.3s ease-out;
+}
+
+.animate-modal-slide-in {
+  animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-alert-slide-in {
+  animation: alertSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Modal backdrop animation */
+.modal-backdrop {
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease-out;
+}
+
+/* Button hover animations */
+.btn-hover-scale {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.btn-hover-glow {
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-hover-glow:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease-in-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Table row hover effects */
+.table-row-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.table-row-hover:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+/* Input focus animations */
+.input-focus {
+  transition: all 0.2s ease-in-out;
+}
+
+.input-focus:focus {
+  transform: scale(1.02);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Loading spinner enhancement */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+/* Mobile-first responsive utilities */
+.mobile-container {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+.mobile-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+}
+
+/* Touch-friendly button sizes */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px];
+}
+
+/* ===== GOLDEN SPARKLE EFFECTS ===== */
+
+/* Golden Sparkle Base Styles */
+.golden-sparkle,
+.golden-form-sparkle,
+.golden-card-sparkle,
+.golden-crown-sparkle,
+.golden-title-sparkle,
+.golden-input-sparkle,
+.golden-button-sparkle,
+.golden-footer-sparkle {
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #ffd700 0%, #ffed4e 50%, transparent 70%);
+  border-radius: 50%;
+  position: absolute;
+  animation: goldenSparkle 3s infinite ease-in-out;
+  box-shadow: 0 0 8px #ffd700, 0 0 16px #ffd700, 0 0 24px #ffd700;
+}
+
+/* Different sizes for variety */
+.golden-sparkle:nth-child(3n+1) {
+  width: 6px;
+  height: 6px;
+  animation-duration: 2.5s;
+}
+
+.golden-sparkle:nth-child(3n+2) {
+  width: 3px;
+  height: 3px;
+  animation-duration: 4s;
+}
+
+/* Form-specific sparkles - smaller and more subtle */
+.golden-form-sparkle {
+  width: 3px;
+  height: 3px;
+  animation: goldenFormSparkle 2s infinite ease-in-out;
+}
+
+/* Card sparkles - medium intensity */
+.golden-card-sparkle {
+  width: 2px;
+  height: 2px;
+  animation: goldenCardSparkle 2.5s infinite ease-in-out;
+}
+
+/* Crown sparkles - special effect */
+.golden-crown-sparkle {
+  width: 2px;
+  height: 2px;
+  animation: goldenCrownSparkle 1.5s infinite ease-in-out;
+}
+
+/* Title sparkles */
+.golden-title-sparkle {
+  width: 3px;
+  height: 3px;
+  animation: goldenTitleSparkle 2s infinite ease-in-out;
+}
+
+/* Input field sparkles */
+.golden-input-sparkle {
+  width: 2px;
+  height: 2px;
+  animation: goldenInputSparkle 1.8s infinite ease-in-out;
+}
+
+/* Button sparkles */
+.golden-button-sparkle {
+  width: 3px;
+  height: 3px;
+  animation: goldenButtonSparkle 1.5s infinite ease-in-out;
+}
+
+/* Footer sparkles */
+.golden-footer-sparkle {
+  width: 2px;
+  height: 2px;
+  animation: goldenFooterSparkle 3s infinite ease-in-out;
+}
+
+/* Falling Stars */
+.golden-falling-star {
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(45deg, #ffd700, #ffed4e, #ffffff);
+  /* Sparkle shape like ✨ emoji - cross with radiating points */
+  clip-path: polygon(50% 0%, 55% 20%, 80% 10%, 60% 35%, 100% 50%, 60% 65%, 80% 90%, 55% 80%, 50% 100%, 45% 80%, 20% 90%, 40% 65%, 0% 50%, 40% 35%, 20% 10%, 45% 20%);
+  position: absolute;
+  animation: fallingStarAnimation 6s infinite linear;
+  box-shadow: 0 0 15px #ffd700, 0 0 25px #ffd700, 0 0 35px #ffd700; /* Enhanced golden glow */
+  top: -20px;
+}
+
+/* Popping Stars - multiply effect */
+.golden-pop-star {
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #ffd700 0%, #ffed4e 60%, transparent 100%);
+  /* Sparkle shape like ✨ emoji - cross with radiating points */
+  clip-path: polygon(50% 0%, 55% 20%, 80% 10%, 60% 35%, 100% 50%, 60% 65%, 80% 90%, 55% 80%, 50% 100%, 45% 80%, 20% 90%, 40% 65%, 0% 50%, 40% 35%, 20% 10%, 45% 20%);
+  position: absolute;
+  animation: popStarAnimation 4s infinite ease-in-out;
+  box-shadow: 0 0 12px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700; /* Enhanced golden glow */
+}
+
+/* ===== SPARKLE ANIMATIONS ===== */
+
+@keyframes goldenSparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1) rotate(90deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2) rotate(180deg);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(0.8) rotate(270deg);
+  }
+}
+
+@keyframes goldenFormSparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+    filter: brightness(1);
+  }
+  33% {
+    opacity: 0.9;
+    transform: scale(1.3) rotate(120deg);
+    filter: brightness(1.5);
+  }
+  66% {
+    opacity: 0.7;
+    transform: scale(0.9) rotate(240deg);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes goldenCardSparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotateZ(0deg) rotateY(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5) rotateZ(180deg) rotateY(180deg);
+    filter: brightness(2);
+  }
+}
+
+@keyframes goldenCrownSparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.5) rotate(90deg);
+    filter: hue-rotate(30deg) brightness(1.8);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1) rotate(180deg);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.2) rotate(270deg);
+    filter: hue-rotate(-30deg) brightness(1.5);
+  }
+}
+
+@keyframes goldenTitleSparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) translateY(0px);
+  }
+  33% {
+    opacity: 1;
+    transform: scale(1.4) translateY(-3px);
+  }
+  66% {
+    opacity: 0.6;
+    transform: scale(0.8) translateY(2px);
+  }
+}
+
+@keyframes goldenInputSparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3) rotate(180deg);
+    filter: brightness(1.6);
+  }
+}
+
+@keyframes goldenButtonSparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  20% {
+    opacity: 0.8;
+    transform: scale(1.2) rotate(72deg);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.5) rotate(144deg);
+  }
+  60% {
+    opacity: 0.9;
+    transform: scale(1.1) rotate(216deg);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.3) rotate(288deg);
+  }
+}
+
+@keyframes goldenFooterSparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  25% {
+    opacity: 0.7;
+    transform: scale(1) rotate(90deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.4) rotate(180deg);
+    filter: brightness(1.3);
+  }
+  75% {
+    opacity: 0.8;
+    transform: scale(0.9) rotate(270deg);
+  }
+}
+
+/* Falling Star Animation */
+@keyframes fallingStarAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) translateX(0px) rotate(0deg) scale(0);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(10vh) translateX(10px) rotate(36deg) scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(30vh) translateX(-5px) rotate(108deg) scale(1.2);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(70vh) translateX(15px) rotate(216deg) scale(0.9);
+  }
+  90% {
+    opacity: 0.3;
+    transform: translateY(95vh) translateX(-10px) rotate(324deg) scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(110vh) translateX(0px) rotate(360deg) scale(0);
+  }
+}
+
+/* Pop Star Animation - Explosive Bursting and Scattering */
+@keyframes popStarAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg) translate(0px, 0px);
+  }
+  10% {
+    opacity: 1;
+    transform: scale(0.8) rotate(36deg) translate(0px, 0px);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(2.5) rotate(72deg) translate(0px, 0px); /* Explosive burst */
+    box-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700, 0 0 60px #ffd700;
+  }
+  30% {
+    opacity: 0.9;
+    transform: scale(1.2) rotate(108deg) translate(15px, -10px); /* Scatter right-up */
+  }
+  40% {
+    opacity: 0.8;
+    transform: scale(0.9) rotate(144deg) translate(-12px, 8px); /* Scatter left-down */
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.5) rotate(180deg) translate(8px, -15px); /* Scatter right-up */
+  }
+  60% {
+    opacity: 0.6;
+    transform: scale(0.7) rotate(216deg) translate(-18px, -5px); /* Scatter left-up */
+  }
+  70% {
+    opacity: 0.5;
+    transform: scale(1.1) rotate(252deg) translate(10px, 12px); /* Scatter right-down */
+  }
+  80% {
+    opacity: 0.4;
+    transform: scale(0.5) rotate(288deg) translate(-8px, -12px); /* Scatter left-up */
+  }
+  90% {
+    opacity: 0.2;
+    transform: scale(0.3) rotate(324deg) translate(5px, 8px); /* Final scatter */
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(360deg) translate(0px, 0px);
+  }
+}
+
+/* Enhanced sparkle variations for different timing */
+.golden-sparkle:nth-child(5n+1) {
+  animation-delay: 0.2s;
+  filter: hue-rotate(15deg);
+}
+
+.golden-sparkle:nth-child(5n+2) {
+  animation-delay: 0.8s;
+  filter: hue-rotate(-15deg);
+}
+
+.golden-sparkle:nth-child(5n+3) {
+  animation-delay: 1.5s;
+  filter: brightness(1.3);
+}
+
+.golden-sparkle:nth-child(5n+4) {
+  animation-delay: 2.1s;
+  filter: hue-rotate(30deg) brightness(0.9);
+}
+
+.golden-sparkle:nth-child(5n+5) {
+  animation-delay: 2.8s;
+  filter: hue-rotate(-30deg) brightness(1.1);
+}
+
+/* Falling star variations */
+.golden-falling-star:nth-child(3n+1) {
+  animation-duration: 5s;
+  filter: hue-rotate(20deg);
+}
+
+.golden-falling-star:nth-child(3n+2) {
+  animation-duration: 7s;
+  filter: brightness(1.2);
+}
+
+.golden-falling-star:nth-child(3n+3) {
+  animation-duration: 6s;
+  filter: hue-rotate(-20deg) brightness(0.9);
+}
+
+/* Pop star variations */
+.golden-pop-star:nth-child(4n+1) {
+  animation-duration: 3.5s;
+  filter: hue-rotate(25deg);
+}
+
+.golden-pop-star:nth-child(4n+2) {
+  animation-duration: 4.5s;
+  filter: brightness(1.3);
+}
+
+.golden-pop-star:nth-child(4n+3) {
+  animation-duration: 3s;
+  filter: hue-rotate(-25deg);
+}
+
+.golden-pop-star:nth-child(4n+4) {
+  animation-duration: 5s;
+  filter: brightness(0.8) hue-rotate(45deg);
+}

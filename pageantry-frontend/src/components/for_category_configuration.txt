@@ -1,0 +1,10 @@
+migration
+candidate model
+
+score controller
+judge controller
+export controller
+
+admin dashboard
+category for voting
+judge dashboard
