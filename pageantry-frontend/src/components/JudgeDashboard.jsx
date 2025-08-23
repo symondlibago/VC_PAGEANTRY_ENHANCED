@@ -4,6 +4,8 @@ import { candidatesAPI, scoresAPI } from '../lib/api';
 import { 
   Crown,
   MicVocal,
+  Film,
+  Shirt,
   CheckCircle, 
   Clock, 
   LogOut,
@@ -20,6 +22,9 @@ import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
 import CategoryVotingPage from './CategoryVotingPage';
 import '../App.css';
+import vcLogo from '../assets/vclogo.jpg';
+import panagbangiLogo from '../assets/panagbangi_logo.jpg';
+
 
 const JudgeDashboard = () => {
   const { user, logout } = useAuth();
@@ -30,36 +35,56 @@ const JudgeDashboard = () => {
 
   const categories = [
     { 
+      id: 'production', 
+      name: 'Production', 
+      icon: Film, 
+      color: 'from-yellow-600 to-yellow-800',
+      bgColor: 'bg-yellow-600',
+      description: 'Athletic wear and fitness presentation'
+    },
+    { 
+      id: 'headress', 
+      name: 'Headress', 
+      icon: Crown, 
+      color: 'from-pink-600 to-pink-800',
+      bgColor: 'bg-pink-600',
+      description: 'Athletic wear and fitness presentation'
+    },
+    { 
       id: 'sports_attire', 
       name: 'Sports Attire', 
-      weight: '20%', 
       icon: Volleyball, 
       color: 'from-blue-600 to-blue-800',
       bgColor: 'bg-blue-600',
       description: 'Athletic wear and fitness presentation'
     },
     { 
+      id: 'casual_attire', 
+      name: 'Casual Attire', 
+      icon: Shirt, 
+      color: 'from-orange-600 to-orange-800',
+      bgColor: 'bg-orange-600',
+      description: 'Athletic wear and fitness presentation'
+    },
+    { 
+      id: 'opening_speech', 
+      name: 'Opening Speech', 
+      icon: MicVocal, 
+      color: 'from-indigo-600 to-indigo-800',
+      bgColor: 'bg-indigo-600',
+      description: 'Athletic wear and fitness presentation'
+    },
+    { 
       id: 'swimsuit', 
       name: 'Swimsuit', 
-      weight: '20%', 
       icon: Waves, 
       color: 'from-red-600 to-red-800',
       bgColor: 'bg-red-600',
       description: 'Swimwear presentation and confidence'
     },
     { 
-      id: 'talent', 
-      name: 'Talent', 
-      weight: '10%', 
-      icon: MicVocal, 
-      color: 'from-yellow-600 to-yellow-800',
-      bgColor: 'bg-yellow-600',
-      description: 'Talent and performance presentation'
-    },
-    { 
       id: 'gown', 
       name: 'Gown', 
-      weight: '20%', 
       icon: Crown, 
       color: 'from-purple-600 to-purple-800',
       bgColor: 'bg-purple-600',
@@ -68,7 +93,6 @@ const JudgeDashboard = () => {
     { 
       id: 'qa', 
       name: 'Q&A', 
-      weight: '30%', 
       icon: User, 
       color: 'from-green-600 to-green-800',
       bgColor: 'bg-green-600',
@@ -174,29 +198,39 @@ const JudgeDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-red-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-primary to-secondary backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                <Crown className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">Judge Panel</h1>
-                <p className="text-sm text-white/80">Welcome, {user?.name}</p>
-              </div>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={logout}
-              className="bg-transparent text-white border-white hover:bg-white hover:text-black"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
+  <div className="container mx-auto px-4 py-4">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center space-x-3">
+        {/* Two Logos */}
+        <div className="flex items-center space-x-2">
+          <div className="w-12 h-12 rounded-full overflow-hidden bg-white flex items-center justify-center p-1">
+            <img src={vcLogo} alt="VC Logo" className="w-full h-full object-contain" />
+          </div>
+          <div className="w-12 h-12 rounded-full overflow-hidden bg-white flex items-center justify-center p-1">
+            <img src={panagbangiLogo} alt="Panagbangi Logo" className="w-full h-full object-contain" />
           </div>
         </div>
-      </header>
+
+        {/* Text Section */}
+        <div>
+          <h1 className="text-2xl font-bold text-white">Mr. and Ms. Panagbangi 2025</h1>
+          <p className="text-sm text-white/80">Welcome, {user?.name}</p>
+        </div>
+      </div>
+
+      {/* Logout Button */}
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={logout}
+        className="bg-transparent text-white border-white hover:bg-white hover:text-black cursor-pointer"
+      >
+        <LogOut className="h-4 w-4 mr-2" />
+      </Button>
+    </div>
+  </div>
+</header>
+
 
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Overall Progress Card */}
@@ -218,7 +252,7 @@ const JudgeDashboard = () => {
               <span className="text-foreground font-medium">{Math.round(overallProgress)}% Complete</span>
             </div>
             <Progress value={overallProgress} className="h-4" />
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
               {categories.map((category) => {
                 const progress = getCategoryProgress(category.id);
                 const status = getCategoryStatus(category.id);
@@ -262,15 +296,6 @@ const JudgeDashboard = () => {
                     <div className="flex items-start justify-between mb-6">
                       <div className={`w-16 h-16 bg-gradient-to-br ${category.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                         <IconComponent className="h-8 w-8 text-white" />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <StatusIcon className={`h-5 w-5 ${getStatusColor(status)}`} />
-                        <Badge 
-                          variant="outline" 
-                          className="border-primary/20 text-primary"
-                        >
-                          {category.weight}
-                        </Badge>
                       </div>
                     </div>
                     

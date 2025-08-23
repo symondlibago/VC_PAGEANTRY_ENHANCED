@@ -25,9 +25,12 @@ class ExportController extends Controller
                 "overall",
                 "top_gown",
                 "top_swimsuit",
-                "top_talent",
                 "top_qa",
+                "top_headress",
+                "top_production",
                 "top_sports_attire",
+                "top_casual_attire",
+                "top_opening_speech",
                 "combined_categories"
             ];
             if (!in_array($filter, $allowed, true)) {
@@ -58,9 +61,12 @@ class ExportController extends Controller
                 "overall",
                 "top_gown",
                 "top_swimsuit",
-                "top_talent",
                 "top_qa",
+                "top_headress",
+                "top_production",
                 "top_sports_attire",
+                "top_casual_attire",
+                "top_opening_speech",
                 "combined_categories"
             ];
             if (!in_array($filter, $allowed, true)) {
@@ -114,15 +120,46 @@ class ExportController extends Controller
                 $title = "Top Swimsuit Results";
                 break;
 
-            case "top_talent":
-                $results = $candidates->map(function ($candidate) {
-                    return [
-                        "candidate" => $candidate,
-                        "score" => (float) $candidate->getAverageScore("talent"),
-                    ];
-                })->sortByDesc("score")->values();
-                $title = "Top Talent Results";
-                break;
+                case "top_production":
+                    $results = $candidates->map(function ($candidate) {
+                        return [
+                            "candidate" => $candidate,
+                            "score" => (float) $candidate->getAverageScore("production"),
+                        ];
+                    })->sortByDesc("score")->values();
+                    $title = "Top Production Results";
+                    break;
+
+                    case "top_headress":
+                        $results = $candidates->map(function ($candidate) {
+                            return [
+                                "candidate" => $candidate,
+                                "score" => (float) $candidate->getAverageScore("headress"),
+                            ];
+                        })->sortByDesc("score")->values();
+                        $title = "Top Headress Results";
+                        break;
+
+                        case "top_casual_attire":
+                            $results = $candidates->map(function ($candidate) {
+                                return [
+                                    "candidate" => $candidate,
+                                    "score" => (float) $candidate->getAverageScore("casual_attire"),
+                                ];
+                            })->sortByDesc("score")->values();
+                            $title = "Top Casual Attire Results";
+                            break;
+
+                            case "top_opening_speech":
+                                $results = $candidates->map(function ($candidate) {
+                                    return [
+                                        "candidate" => $candidate,
+                                        "score" => (float) $candidate->getAverageScore("opening_speech"),
+                                    ];
+                                })->sortByDesc("score")->values();
+                                $title = "Top Opening Speech Results";
+                                break;
+
 
             case "top_qa":
                 $results = $candidates->map(function ($candidate) {
@@ -150,9 +187,12 @@ class ExportController extends Controller
                     $breakdown = $candidate->getScoresBreakdown();
                     return [
                         "candidate" => $candidate,
+                        "production" => (float) $breakdown["production"],
+                        "headress" => (float) $breakdown["headress"],
                         "sports_attire" => (float) $breakdown["sports_attire"],
+                        "casual_attire" => (float) $breakdown["casual_attire"],
+                        "opening_speech" => (float) $breakdown["opening_speech"],
                         "swimsuit" => (float) $breakdown["swimsuit"],
-                        "talent" => (float) $breakdown["talent"],
                         "gown" => (float) $breakdown["gown"],
                         "qa" => (float) $breakdown["qa"],
                         "overall_total" => (float) $breakdown["overall_total"],
@@ -166,14 +206,20 @@ class ExportController extends Controller
                     $breakdown = $candidate->getScoresBreakdown();
                     return [
                         "candidate" => $candidate,
+                        "production" => (float) ($breakdown["production"] ?? 0),
+                        "headress" => (float) ($breakdown["headress"] ?? 0),
                         "sports_attire" => (float) ($breakdown["sports_attire"] ?? 0),
+                        "casual_attire" => (float) ($breakdown["casual_attire"] ?? 0),
+                        "opening_speech" => (float) ($breakdown["opening_speech"] ?? 0),
                         "swimsuit" => (float) ($breakdown["swimsuit"] ?? 0),
-                        "talent" => (float) ($breakdown["talent"] ?? 0),
                         "gown" => (float) ($breakdown["gown"] ?? 0),
                         "combined_total" => (float) (
+                            ($breakdown["production"] ?? 0) +
+                            ($breakdown["headress"] ?? 0) +
                             ($breakdown["sports_attire"] ?? 0) +
+                            ($breakdown["casual_attire"] ?? 0) +
+                            ($breakdown["opening_speech"] ?? 0) +
                             ($breakdown["swimsuit"] ?? 0) +
-                            ($breakdown["talent"] ?? 0) +
                             ($breakdown["gown"] ?? 0)
                         ),
                     ];
@@ -189,9 +235,12 @@ class ExportController extends Controller
                 $breakdown = $candidate->getScoresBreakdown();
                 return [
                     'candidate' => $candidate,
+                    'production' => (float) ($breakdown['production'] ?? 0),
+                    'headress' => (float) ($breakdown['headress'] ?? 0),
                     'sports_attire' => (float) ($breakdown['sports_attire'] ?? 0),
+                    'casual_attire' => (float) ($breakdown['casual_attire'] ?? 0),
+                    'opening_speech' => (float) ($breakdown['opening_speech'] ?? 0),
                     'swimsuit' => (float) ($breakdown['swimsuit'] ?? 0),
-                    'talent' => (float) ($breakdown['talent'] ?? 0),
                     'gown' => (float) ($breakdown['gown'] ?? 0),
                     'qa' => (float) ($breakdown['qa'] ?? 0),
                     'overall_total' => (float) ($breakdown['overall_total'] ?? 0),
@@ -259,16 +308,50 @@ class ResultsExport implements \Maatwebsite\Excel\Concerns\FromCollection,
                 })->sortByDesc("score")->values();
                 break;
 
-            case "top_talent":
-                $rows = $candidates->map(function ($candidate) {
-                    return [
-                        "candidate_number" => $candidate->candidate_number,
-                        "name" => $candidate->name,
-                        "gender" => ucfirst($candidate->gender),
-                        "score" => (float) $candidate->getAverageScore("talent"),
-                    ];
-                })->sortByDesc("score")->values();
-                break;
+                case "top_production":
+                    $rows = $candidates->map(function ($candidate) {
+                        return [
+                            "candidate_number" => $candidate->candidate_number,
+                            "name" => $candidate->name,
+                            "gender" => ucfirst($candidate->gender),
+                            "score" => (float) $candidate->getAverageScore("production"),
+                        ];
+                    })->sortByDesc("score")->values();
+                    break;
+
+                    case "top_headress":
+                        $rows = $candidates->map(function ($candidate) {
+                            return [
+                                "candidate_number" => $candidate->candidate_number,
+                                "name" => $candidate->name,
+                                "gender" => ucfirst($candidate->gender),
+                                "score" => (float) $candidate->getAverageScore("headress"),
+                            ];
+                        })->sortByDesc("score")->values();
+                        break;
+
+                        case "top_casual_attire":
+                            $rows = $candidates->map(function ($candidate) {
+                                return [
+                                    "candidate_number" => $candidate->candidate_number,
+                                    "name" => $candidate->name,
+                                    "gender" => ucfirst($candidate->gender),
+                                    "score" => (float) $candidate->getAverageScore("casual_attire"),
+                                ];
+                            })->sortByDesc("score")->values();
+                            break;
+
+                            case "top_opening_speech":
+                                $rows = $candidates->map(function ($candidate) {
+                                    return [
+                                        "candidate_number" => $candidate->candidate_number,
+                                        "name" => $candidate->name,
+                                        "gender" => ucfirst($candidate->gender),
+                                        "score" => (float) $candidate->getAverageScore("opening_speech"),
+                                    ];
+                                })->sortByDesc("score")->values();
+                                break;
+
 
             case "top_qa":
                 $rows = $candidates->map(function ($candidate) {
@@ -300,9 +383,12 @@ class ResultsExport implements \Maatwebsite\Excel\Concerns\FromCollection,
                         "candidate_number" => $candidate->candidate_number,
                         "name" => $candidate->name,
                         "gender" => ucfirst($candidate->gender),
+                        "production" => (float) $b["production"],
+                        "headress" => (float) $b["headress"],
                         "sports_attire" => (float) $b["sports_attire"],
+                        "casual_attire" => (float) $b["casual_attire"],
+                        "opening_speech" => (float) $b["opening_speech"],
                         "swimsuit" => (float) $b["swimsuit"],
-                        "talent" => (float) $b["talent"],
                         "gown" => (float) $b["gown"],
                         "qa" => (float) $b["qa"],
                         "overall_total" => (float) $b["overall_total"],
@@ -317,14 +403,20 @@ class ResultsExport implements \Maatwebsite\Excel\Concerns\FromCollection,
                         "candidate_number" => $candidate->candidate_number,
                         "name" => $candidate->name,
                         "gender" => ucfirst($candidate->gender),
+                        "production" => (float) ($b["production"] ?? 0),
+                        "headress" => (float) ($b["headress"] ?? 0),
                         "sports_attire" => (float) ($b["sports_attire"] ?? 0),
+                        "casual_attire" => (float) ($b["casual_attire"] ?? 0),
+                        "opening_speech" => (float) ($b["opening_speech"] ?? 0),
                         "swimsuit" => (float) ($b["swimsuit"] ?? 0),
-                        "talent" => (float) ($b["talent"] ?? 0),
                         "gown" => (float) ($b["gown"] ?? 0),
                         "combined_total" => (float) (
+                            ($b["production"] ?? 0) +
+                            ($b["headress"] ?? 0) +
                             ($b["sports_attire"] ?? 0) +
+                            ($b["casual_attire"] ?? 0) +
+                            ($b["opening_speech"] ?? 0) +
                             ($b["swimsuit"] ?? 0) +
-                            ($b["talent"] ?? 0) +
                             ($b["gown"] ?? 0)
                         ),
                     ];
@@ -342,25 +434,34 @@ class ResultsExport implements \Maatwebsite\Excel\Concerns\FromCollection,
             ];
 
             if ($this->filter === "overall") {
+                $ranked["production"] = number_format($row["production"], 2);
+                $ranked["headress"] = number_format($row["headress"], 2);
                 $ranked["sports_attire"] = number_format($row["sports_attire"], 2);
+                $ranked["casual_attire"] = number_format($row["casual_attire"], 2);
+                $ranked["opening_speech"] = number_format($row["opening_speech"], 2);
                 $ranked["swimsuit"] = number_format($row["swimsuit"], 2);
-                $ranked["talent"] = number_format($row["talent"], 2);
                 $ranked["gown"] = number_format($row["gown"], 2);
                 $ranked["qa"] = number_format($row["qa"], 2);
                 $ranked["overall_total"] = number_format($row["overall_total"], 2);
             } elseif ($this->filter === "combined_categories") {
+                $ranked["production"] = number_format($row["production"], 2);
+                $ranked["headress"] = number_format($row["headress"], 2);
                 $ranked["sports_attire"] = number_format($row["sports_attire"], 2);
+                $ranked["casual_attire"] = number_format($row["casual_attire"], 2);
+                $ranked["opening_speech"] = number_format($row["opening_speech"], 2);
                 $ranked["swimsuit"] = number_format($row["swimsuit"], 2);
-                $ranked["talent"] = number_format($row["talent"], 2);
                 $ranked["gown"] = number_format($row["gown"], 2);
                 $ranked["combined_total"] = number_format($row["combined_total"], 2);
             } else {
                 $ranked_label = match ($this->filter) {
                     "top_gown" => "gown_score",
                     "top_swimsuit" => "swimsuit_score",
-                    "top_talent" => "talent_score",
                     "top_qa" => "qa_score",
+                    "top_production" => "production_score",
+                    "top_headress" => "headress_score",
                     "top_sports_attire" => "sports_attire_score",
+                    "top_casual_attire" => "casual_attire_score",
+                    "top_opening_speech" => "opening_speech_score",
                     default => "score",
                 };
                 $ranked[$ranked_label] = number_format($row["score"], 2);
@@ -379,17 +480,23 @@ class ResultsExport implements \Maatwebsite\Excel\Concerns\FromCollection,
                 return ["Rank", "Candidate #", "Name", "Gender", "Gown Score"];
             case "top_swimsuit":
                 return ["Rank", "Candidate #", "Name", "Gender", "Swimsuit Score"];
-            case "top_talent":
-                return ["Rank", "Candidate #", "Name", "Gender", "Talent Score"];
             case "top_qa":
                 return ["Rank", "Candidate #", "Name", "Gender", "Q&A Score"];
+            case "top_production":
+                return ["Rank", "Candidate #", "Name", "Gender", "Production Score"];
+            case "top_headress":
+                return ["Rank", "Candidate #", "Name", "Gender", "Headress Score"];
             case "top_sports_attire":
                 return ["Rank", "Candidate #", "Name", "Gender", "Sports Attire Score"];
+            case "top_casual_attire":
+                return ["Rank", "Candidate #", "Name", "Gender", "Casual Attire Score"];
+            case "top_opening_speech":
+                return ["Rank", "Candidate #", "Name", "Gender", "Opening Speech Score"];
             case "combined_categories":
-                return ["Rank", "Candidate #", "Name", "Gender", "Sports Attire", "Swimsuit", "Talent", "Gown", "Combined Total"];
+                return ["Rank", "Candidate #", "Name", "Gender", "Production", "Headress", "Sports Attire", "Casual Attire", "Opening Speech", "Swimsuit", "Gown", "Combined Total"];
             case "overall":
             default:
-                return ["Rank", "Candidate #", "Name", "Gender", "Sports Attire (20%)", "Swimsuit (20%)", "Talent (10%)", "Gown (20%)", "Q&A (30%)", "Total"];
+                return ["Rank", "Candidate #", "Name", "Gender", "Production", "Headress", "Sports Attire", "Casual Attire", "Opening Speech", "Swimsuit", "Gown", "Q&A", "Total"];
         }
     }
 

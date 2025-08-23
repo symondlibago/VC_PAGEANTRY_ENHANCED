@@ -37,41 +37,64 @@ const CategoryVotingPage = ({ category, onBack }) => {
   const [message, setMessage] = useState('');
 
   const categories = {
+    production: { name: 'Production', icon: Trophy, color: 'bg-blue-600' },
+    headress: { name: 'Headress', icon: Trophy, color: 'bg-blue-600' },
     sports_attire: { name: 'Sports Attire', icon: Trophy, color: 'bg-blue-600' },
+    casual_attire: { name: 'Casual Attire', icon: Trophy, color: 'bg-blue-600' },
+    opening_speech: { name: 'Opening Speech', icon: Trophy, color: 'bg-blue-600' },
     swimsuit: { name: 'Swimsuit', icon: Star, color: 'bg-red-600' },
-    talent: { name: 'Talent', icon: Star, color: 'bg-yellow-600' },
     gown: { name: 'Gown', icon: Crown, color: 'bg-purple-600' },
     qa: { name: 'Q&A', icon: User, color: 'bg-green-600' },
   };
 
   // Sub-category definitions with weights
   const subCategories = {
+    production: [
+      { key: 'stage_presence_energy', name: 'Stage Presence & Energy', weight: 40, maxScore: 40 },
+      { key: 'projection', name: 'Projection', weight: 25, maxScore: 25 },
+      { key: 'creativity_concept', name: 'Creativity & Concept', weight: 20, maxScore: 20 },
+      { key: 'confidence', name: 'Confidence', weight: 15, maxScore: 15 }
+    ],
+    headress: [
+      { key: 'consistency', name: 'Consistency with The Pageant Theme', weight: 35, maxScore: 35 },
+      { key: 'creativity', name: 'Creativity & Originality', weight: 30, maxScore: 30 },
+      { key: 'materials', name: 'Materials, Weight & Size', weight: 20, maxScore: 20 },
+      { key: 'overall', name: 'Overall Aesthetic Appeal & Craftsmanship', weight: 15, maxScore: 15 }
+    ],
     sports_attire: [
-      { key: 'fitness_physique', name: 'Fitness & Physique', weight: 40, maxScore: 40 },
-      { key: 'athletic_wear', name: 'Athletic Wear & Style', weight: 30, maxScore: 30 },
-      { key: 'confidence_stage', name: 'Confidence & Stage Presence', weight: 30, maxScore: 30 }
+      { key: 'creativity_orignality', name: 'Creativity & Originality', weight: 50, maxScore: 50 },
+      { key: 'presentation_execution', name: 'Presentaion & Execution', weight: 30, maxScore: 30 },
+      { key: 'confidence', name: 'Confidence/Personality & Impact', weight: 20, maxScore: 20 }
+    ],
+    casual_attire: [
+      { key: 'fit_sustainability', name: 'Fit & Sustainability', weight: 50, maxScore: 50 },
+      { key: 'poise_bearing', name: 'Poise & Bearing', weight: 20, maxScore: 20 },
+      { key: 'elegance_sophistication', name: 'Elegance & Sophistication', weight: 20, maxScore: 20 },
+      { key: 'confidence', name: 'Confidence', weight: 10, maxScore: 10 }
+    ],
+    opening_speech: [
+      { key: 'content_relevance', name: 'Content/Relevance', weight: 30, maxScore: 30 },
+      { key: 'communication_skills', name: 'Delivery Communication Skills', weight: 25, maxScore: 25 },
+      { key: 'stage_presence', name: 'Stage Presence Confidence', weight: 20, maxScore: 20 },
+      { key: 'poise_confidence', name: 'Poise, Confidence & Body Language', weight: 15, maxScore: 15 },
+      { key: 'Audience Impact', name: 'Audience Impact', weight: 10, maxScore: 10 }
     ],
     swimsuit: [
-      { key: 'fitness_toning', name: 'Fitness & Toning', weight: 40, maxScore: 40 },
-      { key: 'confidence_stage', name: 'Confidence & Stage Presence', weight: 40, maxScore: 40 },
-      { key: 'elegance_styling', name: 'Elegance & Styling', weight: 20, maxScore: 20 }
-    ],
-    talent: [
-      { key: 'skill_execution', name: 'Skill & Execution', weight: 50, maxScore: 50 },
-      { key: 'creativity_originality', name: 'Creativity & Originality', weight: 30, maxScore: 30 },
-      { key: 'stage_presence', name: 'Stage Presence & Charisma', weight: 20, maxScore: 20 }
+      { key: 'physique_fitness', name: 'Physique & Fitness', weight: 40, maxScore: 40 },
+      { key: 'poise_bearing', name: 'Poise & Bearing', weight: 25, maxScore: 25 },
+      { key: 'swimsuit_fit', name: 'Swimsuit Fit & Style', weight: 25, maxScore: 25 },
+      { key: 'confidence', name: 'Confidence', weight: 10, maxScore: 10 }
     ],
     gown: [
-      { key: 'elegance_grace', name: 'Elegance & Grace', weight: 35, maxScore: 35 },
-      { key: 'gown_style', name: 'Gown Style & Fit', weight: 25, maxScore: 25 },
-      { key: 'poise_confidence', name: 'Poise & Confidence', weight: 25, maxScore: 25 },
-      { key: 'overall_presentation', name: 'Overall Presentation', weight: 15, maxScore: 15 }
+      { key: 'elegance_style', name: 'Elegance & Style', weight: 40, maxScore: 40 },
+      { key: 'poise_bearing', name: 'Poise & Bearing ', weight: 20, maxScore: 20 },
+      { key: 'style_design', name: 'Style & Design', weight: 20, maxScore: 20 },
+      { key: 'confidence', name: 'Confidence', weight: 20, maxScore: 20 }
     ],
     qa: [
-      { key: 'content_substance', name: 'Content & Substance', weight: 40, maxScore: 40 },
-      { key: 'communication_clarity', name: 'Communication & Clarity', weight: 30, maxScore: 30 },
-      { key: 'confidence_delivery', name: 'Confidence & Delivery', weight: 20, maxScore: 20 },
-      { key: 'relevance_insight', name: 'Relevance & Insight', weight: 10, maxScore: 10 }
+      { key: 'intelligence_articulateness', name: 'Intelligence & Articulateness', weight: 60, maxScore: 60 },
+      { key: 'physical_attributes', name: 'Physical Attributes', weight: 20, maxScore: 20 },
+      { key: 'personality_poise_carreage', name: 'Personality, Poise & Cerreage', weight: 20, maxScore: 20 }
     ]
   };
 

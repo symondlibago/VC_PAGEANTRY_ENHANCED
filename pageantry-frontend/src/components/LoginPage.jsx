@@ -11,6 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Alert, AlertDescription } from './ui/alert';
 import { useAuth } from '../hooks/useAuth';
 import '../App.css';
+import vcLogo from '../assets/vclogo.jpg';
+import panagbangiLogo from '../assets/panagbangi_logo.jpg';
 
 // Validation schema
 const loginSchema = z.object({
@@ -139,30 +141,43 @@ const LoginPage = () => {
           </div>
 
           <CardHeader className="text-center space-y-4 relative z-10">
-            <div className="mx-auto w-16 h-16 bg-primary rounded-full flex items-center justify-center animate-pulse-blue relative">
-              <Crown className="h-8 w-8 text-primary-foreground" />
-              {/* Crown Sparkles */}
-              {[...Array(6)].map((_, i) => (
-                <div
-                  key={`crown-sparkle-${i}`}
-                  className="absolute golden-crown-sparkle"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    animationDelay: `${Math.random() * 2}s`
-                  }}
-                />
-              ))}
+          <div className="mx-auto flex items-center justify-center relative animate-pulse-blue space-x-4">
+            <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-white p-1 ml-6">
+              <img src={vcLogo} alt="VC Logo" className="w-full h-full object-contain" />
             </div>
+
+            <div className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center bg-white p-1">
+              <img src={panagbangiLogo} alt="Panagbangi Logo" className="w-full h-full object-contain" />
+            </div>
+
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={`logo-sparkle-${i}`}
+                className="absolute golden-crown-sparkle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 2}s`
+                }}
+              />
+            ))}
+          </div>
+
             <div>
-              <CardTitle className="text-2xl font-bold text-foreground relative">
-                Pageantry System
+            <CardTitle className="text-2xl font-bold text-foreground relative">
+            Mr. and Ms. Panagbangi 2025
+            
+                <div className="absolute -top-2 -right-2 golden-title-sparkle" />
+                <div className="absolute -bottom-1 -left-1 golden-title-sparkle" style={{animationDelay: '0.5s'}} />
+              </CardTitle>
+              <CardTitle className="text-medium font-bold text-foreground relative">
+              Vineyard International Polytechnic College
                 {/* Title Sparkles */}
                 <div className="absolute -top-2 -right-2 golden-title-sparkle" />
                 <div className="absolute -bottom-1 -left-1 golden-title-sparkle" style={{animationDelay: '0.5s'}} />
               </CardTitle>
               <CardDescription className="text-muted-foreground mt-2">
-                Sign in to access the tabulation system
+              Pageantry System
               </CardDescription>
             </div>
           </CardHeader>

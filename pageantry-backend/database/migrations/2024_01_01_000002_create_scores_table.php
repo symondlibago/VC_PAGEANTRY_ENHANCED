@@ -15,7 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('judge_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('candidate_id')->constrained('candidates')->onDelete('cascade');
-            $table->enum('category', ['sports_attire', 'swimsuit', 'gown', 'talent', 'qa']);
+            $table->enum('category', [
+            'production',
+            'headress',
+            'sports_attire',
+            'casual_attire', 
+            'opening_speech', 
+            'swimsuit',
+            'gown', 
+            'qa']);
             $table->decimal('score', 5, 2); // Max 999.99
             $table->timestamps();
             

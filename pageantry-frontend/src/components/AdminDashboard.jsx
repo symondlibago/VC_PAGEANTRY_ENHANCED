@@ -6,6 +6,9 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import vcLogo from '../assets/vclogo.jpg';
+import panagbangiLogo from '../assets/panagbangi_logo.jpg';
+
 import {
   Select,
   SelectContent,
@@ -94,9 +97,12 @@ const AdminDashboard = () => {
   const getBackendFilter = (frontendFilter) => {
     const filterMapping = {
       'overall': 'overall',
+      'production': 'top_production',
+      'headress': 'top_headress',
       'sports_attire': 'top_sports_attire',
+      'casual_attire': 'top_casual_attire',
+      'opening_speech': 'opening_speech',
       'swimsuit': 'top_swimsuit',
-      'talent': 'top_talent',
       'gown': 'top_gown',
       'qa': 'top_qa',
       'combined_categories': 'combined_categories'
@@ -108,9 +114,12 @@ const AdminDashboard = () => {
   const getFilterDisplayName = (filter) => {
     const displayNames = {
       'overall': 'Overall Results',
+      'production': 'Production Results',
+      'headress': 'Headress Results',
       'sports_attire': 'Sports Attire Results',
+      'casual_attire': 'Casual Attire Results',
+      'opening_speech': 'Opening Speech Results',
       'swimsuit': 'Swimsuit Results',
-      'talent': 'Talent Results',
       'gown': 'Gown Results',
       'qa': 'Q&A Results',
       'combined_categories': 'Combined Categories Results'
@@ -194,7 +203,7 @@ const AdminDashboard = () => {
 
   // Export all categories function
   const handleExportAll = async (format) => {
-    const categories = ['overall', 'sports_attire', 'swimsuit', 'talent', 'gown', 'qa'];
+    const categories = ['overall', 'production', 'headress', 'sports_attire', 'casual_attire', 'opening_speech', 'swimsuit', 'gown', 'qa'];
     setExportLoading(true);
     
     try {
@@ -421,31 +430,42 @@ const AdminDashboard = () => {
 
       {/* Header */}
       <header className="border-b bg-gradient-to-br from-primary/10 via-background to-accent/10 backdrop-blur-sm sticky top-0 z-50 shadow-lg">
-        <div className="mobile-container py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-black/20 rounded-full flex items-center justify-center">
-                <Crown className="h-5 w-5 text-black" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-black">Admin Dashboard</h1>
-                <p className="text-sm text-black/80">Welcome, {user?.name}</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={logout}
-                className="bg-gradient-to-br from-primary/10 via-background to-accent/10 backdrop-blur-sm hover:bg-white hover:text-black"
-              >
-                <LogOut className="h-4 w-4 mr-2 cursor-pointer" />
-                Logout
-              </Button>
-            </div>
+  <div className="mobile-container py-4">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center space-x-3">
+        {/* Two Logos */}
+        <div className="flex items-center space-x-2">
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-white flex items-center justify-center p-1">
+            <img src={vcLogo} alt="VC Logo" className="w-full h-full object-contain" />
+          </div>
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-white flex items-center justify-center p-1">
+            <img src={panagbangiLogo} alt="Panagbangi Logo" className="w-full h-full object-contain" />
           </div>
         </div>
-      </header>
+
+        {/* Text */}
+        <div>
+          <h1 className="text-xl font-bold text-black">Admin Dashboard</h1>
+          <p className="text-sm text-black/80">Welcome, {user?.name}</p>
+        </div>
+      </div>
+
+      {/* Logout Button */}
+      <div className="flex items-center space-x-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={logout}
+          className="bg-gradient-to-br from-primary/10 via-background to-accent/10 backdrop-blur-sm hover:bg-white hover:text-black cursor-pointer"
+        >
+          <LogOut className="h-4 w-4 mr-2 cursor-pointer" />
+          Logout
+        </Button>
+      </div>
+    </div>
+  </div>
+</header>
+
 
       <div className="mobile-container py-6">
         {/* Stats Cards */}
@@ -485,7 +505,7 @@ const AdminDashboard = () => {
               <div className="text-2xl font-bold">
                 {progress ? Math.round(
                   Object.values(progress.categories_progress)
-                    .reduce((sum, cat) => sum + cat.percentage, 0) / 5
+                    .reduce((sum, cat) => sum + cat.percentage, 0) / 8
                 ) : 0}%
               </div>
               <p className="text-xs text-muted-foreground">
@@ -531,14 +551,14 @@ const AdminDashboard = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     <Select value={genderFilter} onValueChange={handleGenderFilterChange}>
-                      <SelectTrigger className="w-[140px]">
+                      <SelectTrigger className="w-[140px] cursor-pointer">
                         <Filter className="h-4 w-4 mr-2" />
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Genders</SelectItem>
-                        <SelectItem value="male">Male</SelectItem>
-                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="all" className="cursor-pointer">Genders</SelectItem>
+                        <SelectItem value="male" className="cursor-pointer">Male</SelectItem>
+                        <SelectItem value="female" className="cursor-pointer">Female</SelectItem>
                       </SelectContent>
                     </Select>
                     <Button
@@ -559,11 +579,14 @@ const AdminDashboard = () => {
                       <TableHead>Number</TableHead>
                       <TableHead>Name</TableHead>
                       <TableHead>Gender</TableHead>
-                      <TableHead>Sports Attire (20%)</TableHead>
-                      <TableHead>Swimsuit (20%)</TableHead>
-                      <TableHead>Talent (10%)</TableHead>
-                      <TableHead>Gown (20%)</TableHead>
-                      <TableHead>Q&A (30%)</TableHead>
+                      <TableHead>Production</TableHead>
+                      <TableHead>Headress</TableHead>
+                      <TableHead>Sports Attire</TableHead>
+                      <TableHead>Casual Attire</TableHead>
+                      <TableHead>Opening Speech</TableHead>
+                      <TableHead>Swimsuit</TableHead>
+                      <TableHead>Gown</TableHead>
+                      <TableHead>Q&A</TableHead>
                       <TableHead>Total</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
@@ -588,14 +611,23 @@ const AdminDashboard = () => {
                             {candidate.gender === 'male' ? 'Male' : 'Female'}
                           </Badge>
                         </TableCell>
+                        <TableCell className={getScoreColor(candidate.scores?.production)}>
+                          {formatScore(candidate.scores?.production)}
+                        </TableCell>
+                        <TableCell className={getScoreColor(candidate.scores?.headress)}>
+                          {formatScore(candidate.scores?.headress)}
+                        </TableCell>
                         <TableCell className={getScoreColor(candidate.scores?.sports_attire)}>
                           {formatScore(candidate.scores?.sports_attire)}
                         </TableCell>
+                        <TableCell className={getScoreColor(candidate.scores?.casual_attire)}>
+                          {formatScore(candidate.scores?.casual_attire)}
+                        </TableCell>
+                        <TableCell className={getScoreColor(candidate.scores?.opening_speech)}>
+                          {formatScore(candidate.scores?.opening_speech)}
+                        </TableCell>
                         <TableCell className={getScoreColor(candidate.scores?.swimsuit)}>
                           {formatScore(candidate.scores?.swimsuit)}
-                        </TableCell>
-                        <TableCell className={getScoreColor(candidate.scores?.talent)}>
-                          {formatScore(candidate.scores?.talent)}
                         </TableCell>
                         <TableCell className={getScoreColor(candidate.scores?.gown)}>
                           {formatScore(candidate.scores?.gown)}
@@ -661,9 +693,12 @@ const AdminDashboard = () => {
                       <TableHead>Name</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Status</TableHead>
+                      <TableHead>Production</TableHead>
+                      <TableHead>Headress</TableHead>
                       <TableHead>Sports Attire</TableHead>
+                      <TableHead>Casual Attire</TableHead>
+                      <TableHead>Opening Speech</TableHead>
                       <TableHead>Swimsuit</TableHead>
-                      <TableHead>Talent</TableHead>
                       <TableHead>Gown</TableHead>
                       <TableHead>Q&A</TableHead>
                       <TableHead>Actions</TableHead>
@@ -684,17 +719,32 @@ const AdminDashboard = () => {
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
+                              {judge.progress?.production?.percentage || 0}%
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">
+                              {judge.progress?.headress?.percentage || 0}%
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">
                               {judge.progress?.sports_attire?.percentage || 0}%
                             </div>
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
-                              {judge.progress?.swimsuit?.percentage || 0}%
+                              {judge.progress?.casual_attire?.percentage || 0}%
                             </div>
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
-                              {judge.progress?.talent?.percentage || 0}%
+                              {judge.progress?.opening_speech?.percentage || 0}%
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">
+                              {judge.progress?.swimsuit?.percentage || 0}%
                             </div>
                           </TableCell>
                           <TableCell>
@@ -766,9 +816,12 @@ const AdminDashboard = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="overall">Overall</SelectItem>
+                        <SelectItem value="production">Production</SelectItem>
+                        <SelectItem value="headress">Headress</SelectItem>
                         <SelectItem value="sports_attire">Sports Attire</SelectItem>
+                        <SelectItem value="casual_attire">Casual Attire</SelectItem>
+                        <SelectItem value="opening_speech">Opening Speech</SelectItem>
                         <SelectItem value="swimsuit">Swimsuit</SelectItem>
-                        <SelectItem value="talent">Talent</SelectItem>
                         <SelectItem value="gown">Gown</SelectItem>
                         <SelectItem value="qa">Q&A</SelectItem>
                       </SelectContent>
@@ -866,9 +919,12 @@ const AdminDashboard = () => {
                       <TableHead>Gender</TableHead>
                       {filter === 'overall' ? (
                         <>
+                          <TableHead>Production</TableHead>
+                          <TableHead>Headress</TableHead>
                           <TableHead>Sports Attire</TableHead>
+                          <TableHead>Casual Attire</TableHead>
+                          <TableHead>Opening Speech</TableHead>
                           <TableHead>Swimsuit</TableHead>
-                          <TableHead>Talent</TableHead>
                           <TableHead>Gown</TableHead>
                           <TableHead>Q&A</TableHead>
                           <TableHead>Total</TableHead>
@@ -929,9 +985,12 @@ const AdminDashboard = () => {
                         </TableCell>
                         {filter === 'overall' ? (
                           <>
+                            <TableCell className={getScoreColor(item.scores_breakdown?.production)}>{formatScore(item.scores_breakdown?.production)}</TableCell>
+                            <TableCell className={getScoreColor(item.scores_breakdown?.headress)}>{formatScore(item.scores_breakdown?.headress)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.sports_attire)}>{formatScore(item.scores_breakdown?.sports_attire)}</TableCell>
+                            <TableCell className={getScoreColor(item.scores_breakdown?.casual_attire)}>{formatScore(item.scores_breakdown?.casual_attire)}</TableCell>
+                            <TableCell className={getScoreColor(item.scores_breakdown?.opening_speech)}>{formatScore(item.scores_breakdown?.opening_speech)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.swimsuit)}>{formatScore(item.scores_breakdown?.swimsuit)}</TableCell>
-                            <TableCell className={getScoreColor(item.scores_breakdown?.talent)}>{formatScore(item.scores_breakdown?.talent)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.gown)}>{formatScore(item.scores_breakdown?.gown)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.qa)}>{formatScore(item.scores_breakdown?.qa)}</TableCell>
                             <TableCell className={`font-bold ${getScoreColor(item.overall_total)}`}>
