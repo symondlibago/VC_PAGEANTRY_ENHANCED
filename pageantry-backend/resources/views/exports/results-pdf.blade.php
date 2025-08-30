@@ -16,33 +16,40 @@
         border-bottom: 2px solid #007bff;
         padding-bottom: 15px;
     }
+
     .header h1 {
         color: #007bff;
         margin: 0;
-        font-size: 22px;
+        font-size: 17px; 
     }
+
     .header .school-name {
         color: maroon;
         font-weight: bold;
-        font-size: 16px;
+        font-size: 25px; 
         margin: 5px 0;
     }
+
     .header .pageant-name {
-        color: darkgreen;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 22px; 
         margin: 3px 0 8px 0;
+        background: linear-gradient(to right, black, maroon);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
+
     .header p {
         margin: 5px 0;
-        color: #666;
-        font-size: 13px;
+        color: black;
+        font-size: 20px;
     }
+
     .logo-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 40px; /* more spacing between logos */
+        gap: 40px;
         width: 100%;
         margin-bottom: 10px;
     }
@@ -102,6 +109,7 @@
         padding-top: 10px;
     }
 </style>
+
 </head>
 <body>
 <div class="header">

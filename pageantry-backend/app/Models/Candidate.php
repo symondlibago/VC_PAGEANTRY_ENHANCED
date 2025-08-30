@@ -49,7 +49,7 @@ class Candidate extends Model
         $headress = $this->getAverageScore('headress');
         $sportsAttire = $this->getAverageScore('sports_attire');
         $casualAttire = $this->getAverageScore('casual_attire');
-        $openingSpeech = $this->getAverageScore('opening speech');
+        $openingSpeech = $this->getAverageScore('opening_speech');
         $swimsuit = $this->getAverageScore('swimsuit');
         $gown = $this->getAverageScore('gown');
 
@@ -63,6 +63,55 @@ class Candidate extends Model
         if ($gown > 0) $categoriesCount++;
 
         return $categoriesCount > 0 ? ($production + $headress + $sportsAttire + $casualAttire + $openingSpeech + $swimsuit + $gown) / $categoriesCount : 0;
+    }
+
+    /**
+     * Get total score excluding Q&A category (for Q&A finals qualification)
+     */
+    public function getTotalScoreExcludingQA(): float
+    {
+        $production = $this->getAverageScore('production');
+        $headress = $this->getAverageScore('headress');
+        $sportsAttire = $this->getAverageScore('sports_attire');
+        $casualAttire = $this->getAverageScore('casual_attire');
+        $openingSpeech = $this->getAverageScore('opening_speech');
+        $swimsuit = $this->getAverageScore('swimsuit');
+        $gown = $this->getAverageScore('gown');
+
+        // Count only categories that have scores (excluding Q&A)
+        $categoriesCount = 0;
+        $totalScore = 0;
+
+        if ($production > 0) {
+            $categoriesCount++;
+            $totalScore += $production;
+        }
+        if ($headress > 0) {
+            $categoriesCount++;
+            $totalScore += $headress;
+        }
+        if ($sportsAttire > 0) {
+            $categoriesCount++;
+            $totalScore += $sportsAttire;
+        }
+        if ($casualAttire > 0) {
+            $categoriesCount++;
+            $totalScore += $casualAttire;
+        }
+        if ($openingSpeech > 0) {
+            $categoriesCount++;
+            $totalScore += $openingSpeech;
+        }
+        if ($swimsuit > 0) {
+            $categoriesCount++;
+            $totalScore += $swimsuit;
+        }
+        if ($gown > 0) {
+            $categoriesCount++;
+            $totalScore += $gown;
+        }
+
+        return $categoriesCount > 0 ? $totalScore / $categoriesCount : 0;
     }
 
     /**

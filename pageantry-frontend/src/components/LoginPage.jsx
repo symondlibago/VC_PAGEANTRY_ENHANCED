@@ -123,7 +123,7 @@ const LoginPage = () => {
           ))}
         </div>
 
-        <Card className="shadow-2xl border-0 bg-card/95 backdrop-blur-sm relative overflow-hidden">
+        <Card className="glass-morphism-card relative overflow-hidden">
           {/* Card Internal Sparkles */}
           <div className="absolute inset-0 pointer-events-none">
             {[...Array(8)].map((_, i) => (

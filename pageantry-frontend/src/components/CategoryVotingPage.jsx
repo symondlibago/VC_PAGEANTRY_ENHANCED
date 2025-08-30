@@ -14,7 +14,8 @@ import {
   Loader2,
   Send,
   AlertCircle,
-  Calculator
+  Calculator,
+  Award
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
@@ -35,6 +36,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState('');
+  const [isQAFinals, setIsQAFinals] = useState(false);
 
   const categories = {
     production: { name: 'Production', icon: Trophy, color: 'bg-blue-600' },
@@ -137,6 +139,12 @@ const CategoryVotingPage = ({ category, onBack }) => {
       
       setCandidates(data.candidates || []);
       setProgress(data.progress || {});
+      setIsQAFinals(data.is_qa_finals || false);
+      
+      // Set message if this is Q&A finals
+      if (data.is_qa_finals && data.message) {
+        setMessage(data.message);
+      }
       
       // Only set current index if there are candidates
       if (data.candidates && data.candidates.length > 0) {
@@ -222,7 +230,10 @@ const CategoryVotingPage = ({ category, onBack }) => {
         setSubCategoryScores({});
         setMessage(`Score submitted! Moving to next candidate.`);
       } else {
-        setMessage(`Score submitted! All candidates in ${currentCategory.name} category completed.`);
+        const completionMessage = isQAFinals 
+          ? `Score submitted! All Q&A finalists completed.`
+          : `Score submitted! All candidates in ${currentCategory.name} category completed.`;
+        setMessage(completionMessage);
       }
 
     } catch (error) {
@@ -296,7 +307,9 @@ const CategoryVotingPage = ({ category, onBack }) => {
                 <currentCategory.icon className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">{currentCategory.name} Voting</h1>
+                <h1 className="text-xl font-bold text-white">
+                  {currentCategory.name} {isQAFinals ? 'Finals' : 'Voting'}
+                </h1>
                 <p className="text-sm text-blue-200">Judge: {user?.name}</p>
               </div>
             </div>
@@ -305,15 +318,25 @@ const CategoryVotingPage = ({ category, onBack }) => {
       </header>
 
       <div className="container mx-auto px-4 py-6 space-y-6">
+        {/* Q&A Finals Notice */}
+        {isQAFinals && (
+          <Alert className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-500/30">
+            <Award className="h-4 w-4 text-yellow-400" />
+            <AlertDescription className="text-yellow-100">
+              <strong>Q&A Finals Round:</strong> You are now voting for the top 3 male and top 3 female finalists who qualified based on their performance in all previous categories.
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Progress Card */}
         <Card className="bg-black/20 backdrop-blur-sm border-white/10">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-white">
-                {currentCategory.name} Progress
+                {currentCategory.name} {isQAFinals ? 'Finals' : ''} Progress
               </h3>
               <Badge variant="outline" className="border-white/20 text-white">
-                {currentIndex + 1} of {candidates.length}
+                {currentIndex + 1} of {candidates.length} {isQAFinals ? 'finalists' : 'candidates'}
               </Badge>
             </div>
             <div className="space-y-2">
@@ -345,18 +368,28 @@ const CategoryVotingPage = ({ category, onBack }) => {
                         <CheckCircle className="h-6 w-6 text-white" />
                       </div>
                     )}
+                    {isQAFinals && (
+                      <div className="absolute -bottom-2 -right-2 bg-yellow-500 rounded-full p-2">
+                        <Award className="h-6 w-6 text-white" />
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Candidate Info */}
                 <div>
                   <Badge variant="outline" className="mb-3 border-white/20 text-white">
-                    Candidate #{currentCandidate.candidate_number}
+                    {isQAFinals ? 'Finalist' : 'Candidate'} #{currentCandidate.candidate_number}
                   </Badge>
                   <h2 className="text-4xl font-bold mb-2 text-white">{currentCandidate.name}</h2>
                   <p className="text-xl text-blue-200">
-                    {currentCategory.name} Category
+                    {currentCategory.name} {isQAFinals ? 'Finals' : 'Category'}
                   </p>
+                  {isQAFinals && (
+                    <p className="text-sm text-yellow-200 mt-2">
+                      🏆 Qualified as Top 3 {currentCandidate.gender === 'male' ? 'Male' : 'Female'}
+                    </p>
+                  )}
                 </div>
 
                 {/* Voting Status */}
@@ -364,7 +397,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
                   <Alert className="max-w-md mx-auto bg-green-500/20 border-green-500/30">
                     <CheckCircle className="h-4 w-4 text-green-400" />
                     <AlertDescription className="text-green-100">
-                      You have already voted for this candidate in this category.
+                      You have already voted for this {isQAFinals ? 'finalist' : 'candidate'} in this category.
                     </AlertDescription>
                   </Alert>
                 ) : (
@@ -393,8 +426,8 @@ const CategoryVotingPage = ({ category, onBack }) => {
                               step="0.01"
                               value={subCategoryScores[subCat.key] || ''}
                               onChange={(e) => handleSubCategoryScoreChange(subCat.key, e.target.value)}
+                              className="w-20 border-white text-white text-center"
                               placeholder={`0-${subCat.maxScore}`}
-                              className="w-20 text-center bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-blue-400"
                             />
                           </div>
                         ))}
@@ -402,91 +435,85 @@ const CategoryVotingPage = ({ category, onBack }) => {
                     </div>
 
                     {/* Total Score Display */}
-                    <div className="max-w-xs mx-auto">
-                      <Label htmlFor="score" className="text-lg font-medium text-white">
-                        Total Score (Auto-calculated)
+                    <div className="max-w-md mx-auto">
+                      <Label className="text-lg font-semibold text-white mb-2 block text-center">
+                        Total Score
                       </Label>
-                      <Input
-                        id="score"
-                        type="number"
-                        value={score}
-                        readOnly
-                        className="text-center text-2xl h-16 mt-3 bg-green-500/20 border-green-500/30 text-green-100 font-bold cursor-not-allowed"
-                      />
-                      <p className="text-xs text-blue-200 mt-2 text-center">
-                        This score is automatically calculated from sub-categories above
-                      </p>
+                      <div className="relative">
+                        <Input
+                          type="number"
+                          min="0"
+                          max="100"
+                          step="0.01"
+                          value={score}
+                          readOnly
+                          className="w-full text-center text-2xl font-bold bg-white/10 border-white/20 text-white h-16"
+                          placeholder="0.00"
+                        />
+                        <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60">
+                          / 100
+                        </span>
+                      </div>
                     </div>
 
+                    {/* Submit Button */}
                     <Button
                       onClick={handleScoreSubmit}
-                      disabled={!score || submitting || currentCandidate.has_voted || parseFloat(score) === 0}
-                      className="w-full max-w-xs mx-auto h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                      disabled={!score || submitting || parseFloat(score) === 0}
+                      className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-8 py-3 text-lg font-semibold"
                     >
                       {submitting ? (
                         <>
-                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          <Loader2 className="h-5 w-5 mr-2 animate-spin" />
                           Submitting...
                         </>
                       ) : (
                         <>
-                          <Send className="mr-2 h-5 w-5" />
-                          Submit Score ({score})
+                          <Send className="h-5 w-5 mr-2" />
+                          Submit Score
                         </>
                       )}
                     </Button>
                   </div>
                 )}
 
-                {/* Message */}
+                {/* Navigation */}
+                <div className="flex justify-between items-center max-w-md mx-auto">
+                  <Button
+                    variant="outline"
+                    onClick={() => navigateCandidate('prev')}
+                    disabled={currentIndex === 0}
+                    className="border-white/20 text-white bg-white/10"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Previous
+                  </Button>
+                  
+                  <span className="text-white/60 text-sm">
+                    {currentIndex + 1} of {candidates.length}
+                  </span>
+                  
+                  <Button
+                    variant="outline"
+                    onClick={() => navigateCandidate('next')}
+                    disabled={currentIndex === candidates.length - 1}
+                    className="border-white/20 text-white bg-white/10"
+                  >
+                    Next
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+
+                {/* Message Display */}
                 {message && (
                   <Alert className="max-w-md mx-auto bg-blue-500/20 border-blue-500/30">
-                    <AlertDescription className="text-blue-100">{message}</AlertDescription>
+                    <AlertCircle className="h-4 w-4 text-blue-400" />
+                    <AlertDescription className="text-blue-100">
+                      {message}
+                    </AlertDescription>
                   </Alert>
                 )}
               </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Navigation */}
-        <div className="flex justify-between items-center">
-          <Button
-            variant="outline"
-            onClick={() => navigateCandidate('prev')}
-            disabled={currentIndex === 0}
-            className="touch-target bg-white/10 border-white/20 text-white hover:bg-white/20"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Previous
-          </Button>
-
-          <div className="text-center">
-            <p className="text-sm text-blue-200">
-              Candidate {currentIndex + 1} of {candidates.length}
-            </p>
-          </div>
-
-          <Button
-            variant="outline"
-            onClick={() => navigateCandidate('next')}
-            disabled={currentIndex === candidates.length - 1}
-            className="touch-target bg-white/10 border-white/20 text-white hover:bg-white/20"
-          >
-            Next
-            <ArrowRight className="h-4 w-4 ml-2" />
-          </Button>
-        </div>
-
-        {/* No Candidates Message */}
-        {!loading && candidates.length === 0 && (
-          <Card className="bg-black/20 backdrop-blur-sm border-white/10">
-            <CardContent className="p-8 text-center">
-              <Clock className="h-12 w-12 mx-auto mb-4 text-blue-400" />
-              <h3 className="text-lg font-semibold mb-2 text-white">No Candidates Available</h3>
-              <p className="text-blue-200">
-                There are no candidates available for voting in this category.
-              </p>
             </CardContent>
           </Card>
         )}

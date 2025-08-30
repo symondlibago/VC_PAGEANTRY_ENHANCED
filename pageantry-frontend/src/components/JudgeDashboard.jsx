@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { candidatesAPI, scoresAPI } from '../lib/api';
-import { 
+import {
   Crown,
   MicVocal,
   Film,
   Shirt,
-  CheckCircle, 
-  Clock, 
+  CheckCircle,
+  Clock,
   LogOut,
   Volleyball,
   User,
@@ -32,68 +32,69 @@ const JudgeDashboard = () => {
   const [categoryProgress, setCategoryProgress] = useState({});
   const [overallProgress, setOverallProgress] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [animationState, setAnimationState] = useState('assemble'); // 'assemble', 'disassemble', 'static'
 
   const categories = [
-    { 
-      id: 'production', 
-      name: 'Production', 
-      icon: Film, 
+    {
+      id: 'production',
+      name: 'Production',
+      icon: Film,
       color: 'from-yellow-600 to-yellow-800',
       bgColor: 'bg-yellow-600',
       description: 'Athletic wear and fitness presentation'
     },
-    { 
-      id: 'headress', 
-      name: 'Headress', 
-      icon: Crown, 
+    {
+      id: 'headress',
+      name: 'Headress',
+      icon: Crown,
       color: 'from-pink-600 to-pink-800',
       bgColor: 'bg-pink-600',
       description: 'Athletic wear and fitness presentation'
     },
-    { 
-      id: 'sports_attire', 
-      name: 'Sports Attire', 
-      icon: Volleyball, 
+    {
+      id: 'sports_attire',
+      name: 'Sports Attire',
+      icon: Volleyball,
       color: 'from-blue-600 to-blue-800',
       bgColor: 'bg-blue-600',
       description: 'Athletic wear and fitness presentation'
     },
-    { 
-      id: 'casual_attire', 
-      name: 'Casual Attire', 
-      icon: Shirt, 
+    {
+      id: 'casual_attire',
+      name: 'Casual Attire',
+      icon: Shirt,
       color: 'from-orange-600 to-orange-800',
       bgColor: 'bg-orange-600',
       description: 'Athletic wear and fitness presentation'
     },
-    { 
-      id: 'opening_speech', 
-      name: 'Opening Speech', 
-      icon: MicVocal, 
+    {
+      id: 'opening_speech',
+      name: 'Opening Speech',
+      icon: MicVocal,
       color: 'from-indigo-600 to-indigo-800',
       bgColor: 'bg-indigo-600',
       description: 'Athletic wear and fitness presentation'
     },
-    { 
-      id: 'swimsuit', 
-      name: 'Swimsuit', 
-      icon: Waves, 
+    {
+      id: 'swimsuit',
+      name: 'Swimsuit',
+      icon: Waves,
       color: 'from-red-600 to-red-800',
       bgColor: 'bg-red-600',
       description: 'Swimwear presentation and confidence'
     },
-    { 
-      id: 'gown', 
-      name: 'Gown', 
-      icon: Crown, 
+    {
+      id: 'gown',
+      name: 'Gown',
+      icon: Crown,
       color: 'from-purple-600 to-purple-800',
       bgColor: 'bg-purple-600',
       description: 'Evening gown elegance and poise'
     },
-    { 
-      id: 'qa', 
-      name: 'Q&A', 
-      icon: User, 
+    {
+      id: 'qa',
+      name: 'Q&A',
+      icon: User,
       color: 'from-green-600 to-green-800',
       bgColor: 'bg-green-600',
       description: 'Question and answer intelligence'
@@ -105,16 +106,59 @@ const JudgeDashboard = () => {
     loadProgressData();
   }, []);
 
+  // Animation cycle effect
+  useEffect(() => {
+    const schoolName = "Vineyard International Polytechnic College";
+    const charDelay = 1; // seconds between each character
+    const animationDuration = 1; // seconds for each character animation
+    
+    const assembleDuration = (schoolName.length * charDelay + animationDuration) * 1000; // Convert to milliseconds
+    const staticDuration = 7000; // 3 seconds static
+    const disassembleDuration = (schoolName.length * charDelay + animationDuration) * 1000; // Convert to milliseconds
+    const pauseDuration = 2000; // 1 second pause before restarting
+    
+    const runAnimationCycle = () => {
+      // Start with assembly
+      setAnimationState('assemble');
+      
+      // Switch to static after assembly completes
+      const staticTimer = setTimeout(() => {
+        setAnimationState('static');
+        
+        // Switch to disassemble after static period
+        const disassembleTimer = setTimeout(() => {
+          setAnimationState('disassemble');
+          
+          // Restart cycle after disassembly completes
+          const restartTimer = setTimeout(() => {
+            runAnimationCycle(); // Recursive call to loop the animation
+          }, disassembleDuration + pauseDuration);
+          
+          return () => clearTimeout(restartTimer);
+        }, staticDuration);
+        
+        return () => clearTimeout(disassembleTimer);
+      }, assembleDuration);
+      
+      return () => clearTimeout(staticTimer);
+    };
+    
+    // Start the animation cycle
+    const cleanup = runAnimationCycle();
+    
+    return cleanup;
+  }, []); // Empty dependency array to run only once on mount
+
   const loadProgressData = async () => {
     try {
       setLoading(true);
-      
+
       if (user?.role === 'judge') {
         const response = await scoresAPI.getProgress();
         const data = response.data.data;
-        
+
         setCategoryProgress(data.categories_progress || {});
-        
+
         // Calculate overall progress
         const totalCategories = categories.length;
         const completedCategories = Object.values(data.categories_progress || {})
@@ -125,12 +169,12 @@ const JudgeDashboard = () => {
         setCategoryProgress({});
         setOverallProgress(0);
       }
-      
+
     } catch (error) {
       console.error('Error loading progress data:', error);
       // Don't show error for judges as they don't have access to this endpoint
       if (user?.role === 'admin') {
-        setError('Failed to load progress data');
+        // setError('Failed to load progress data');
       }
     } finally {
       setLoading(false);
@@ -194,15 +238,17 @@ const JudgeDashboard = () => {
     );
   }
 
+  const schoolName = "Vineyard International Polytechnic College";
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-red-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-primary to-secondary backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
   <div className="container mx-auto px-4 py-4">
     <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-3">
-        {/* Two Logos */}
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-6">
+        {/* Two Logos - Vertically Aligned */}
+        <div className="flex flex-col items-center space-y-2">
           <div className="w-12 h-12 rounded-full overflow-hidden bg-white flex items-center justify-center p-1">
             <img src={vcLogo} alt="VC Logo" className="w-full h-full object-contain" />
           </div>
@@ -211,10 +257,30 @@ const JudgeDashboard = () => {
           </div>
         </div>
 
-        {/* Text Section */}
-        <div>
-          <h1 className="text-2xl font-bold text-white">Mr. and Ms. Panagbangi 2025</h1>
-          <p className="text-sm text-white/80">Welcome, {user?.name}</p>
+        {/* Text Section - Centered */}
+        <div className="flex flex-col justify-center">
+          <h1 className="text-2xl font-bold text-white text-center">Mr. and Ms. Panagbangi 2025</h1>
+          <p className="text-sm text-white/80 text-center">Welcome, {user?.name}</p>
+          <div className={`school-name-animation ${animationState} text-white text-l text-center`}>
+            {schoolName.split('').map((char, index) => {
+              const totalChars = schoolName.length;
+              const assembleDelay = index * 0.05;
+              const disassembleDelay = index * 0.05; // Same order as assembly for reverse effect
+              
+              return (
+                <span 
+                  key={index} 
+                  className="animated-char" 
+                  style={{ 
+                    '--assemble-delay': `${assembleDelay}s`,
+                    '--disassemble-delay': `${disassembleDelay}s`
+                  }}
+                >
+                  {char === ' ' ? '\u00A0' : char}
+                </span>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -355,4 +421,6 @@ const JudgeDashboard = () => {
 };
 
 export default JudgeDashboard;
+
+
 

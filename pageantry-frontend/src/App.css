@@ -734,3 +734,213 @@
   animation-duration: 5s;
   filter: brightness(0.8) hue-rotate(45deg);
 }
+
+/* School Name Animation */
+.school-name-animation {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+  height: 30px; /* Fixed height to prevent layout shift */
+}
+
+.animated-char {
+  opacity: 0;
+  transform: translateX(100px); /* Start off-screen to the right */
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth easing */
+  display: inline-block; /* Ensure spaces are preserved */
+}
+
+/* Assembly Animation - Letters come from right to left */
+@keyframes assemble-right-to-left {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Disassembly Animation - Letters go back to right (reverse of assembly) */
+@keyframes disassemble-to-right {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+/* Apply assemble animation with CSS variable delay */
+.school-name-animation.assemble .animated-char {
+  animation-name: assemble-right-to-left;
+  animation-duration: 0.6s;
+  animation-delay: var(--assemble-delay);
+}
+
+/* Apply disassemble animation with CSS variable delay (same timing as assembly but reverse direction) */
+.school-name-animation.disassemble .animated-char {
+  animation-name: disassemble-to-right;
+  animation-duration: 0.6s;
+  animation-delay: var(--disassemble-delay);
+  animation-direction: reverse; /* This makes the animation play in reverse */
+}
+
+/* Static state - all letters visible */
+.school-name-animation.static .animated-char {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+
+
+
+/* ===== GLASS MORPHISM EFFECT ===== */
+
+.glass-morphism-card {
+  /* Glass morphism background */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  
+  /* Subtle border with gradient */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  
+  /* Enhanced shadow for depth */
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  
+  /* Smooth transitions */
+  transition: all 0.3s ease-in-out;
+}
+
+.glass-morphism-card:hover {
+  /* Slightly more visible on hover */
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.35),
+    0 6px 20px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Dark mode adjustments for glass morphism */
+.dark .glass-morphism-card {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-morphism-card:hover {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    0 6px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Enhanced backdrop blur for better glass effect */
+@supports (backdrop-filter: blur(20px)) {
+  .glass-morphism-card {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+
+/* Fallback for browsers that don't support backdrop-filter */
+@supports not (backdrop-filter: blur(20px)) {
+  .glass-morphism-card {
+    background: rgba(255, 255, 255, 0.85);
+  }
+  
+  .dark .glass-morphism-card {
+    background: rgba(0, 0, 0, 0.85);
+  }
+}
+
+
+
+/* ===== TEXT COLOR OVERRIDES FOR GLASS MORPHISM ===== */
+
+/* Ensure all text in glass morphism card is highly visible */
+.glass-morphism-card * {
+  color: white !important;
+}
+
+/* Specific overrides for different text elements */
+.glass-morphism-card .text-foreground,
+.glass-morphism-card .text-card-foreground {
+  color: white !important;
+}
+
+.glass-morphism-card .text-muted-foreground {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Card title styling */
+.glass-morphism-card h1,
+.glass-morphism-card h2,
+.glass-morphism-card h3,
+.glass-morphism-card .font-bold {
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Label styling */
+.glass-morphism-card label {
+  color: white !important;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Description text */
+.glass-morphism-card .text-muted-foreground,
+.glass-morphism-card p {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Input field styling for better visibility */
+.glass-morphism-card input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+}
+
+.glass-morphism-card input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.glass-morphism-card input:focus {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Button text visibility */
+.glass-morphism-card button {
+  color: white !important;
+  font-weight: 600;
+}
+
+/* Error text styling */
+.glass-morphism-card .text-destructive {
+  color: #ff6b6b !important;
+  background: rgba(255, 107, 107, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+

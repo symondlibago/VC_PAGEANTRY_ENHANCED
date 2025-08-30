@@ -208,7 +208,12 @@ class CandidateController extends Controller
         $judge = $request->user();
         $category = $request->get('category', 'sports_attire');
 
-        // Get all active candidates
+        // Special handling for Q&A category - only show top 3 male and top 3 female
+        if ($category === 'qa') {
+            return $this->getQACandidates($judge, $category);
+        }
+
+        // Get all active candidates for other categories
         $candidates = Candidate::where('is_active', true)
             ->orderBy('candidate_number')
             ->get();
@@ -236,6 +241,80 @@ class CandidateController extends Controller
                 'candidates' => $candidatesForJudging,
                 'category' => $category,
                 'progress' => $judge->getJudgingProgress($category)
+            ]
+        ]);
+    }
+
+    /**
+     * Get top 3 male and top 3 female candidates for Q&A voting
+     * Based on cumulative scores from all categories except Q&A
+     */
+    private function getQACandidates($judge, $category): JsonResponse
+    {
+        // Get all active candidates
+        $allCandidates = Candidate::where('is_active', true)->get();
+
+        // Calculate scores excluding Q&A and group by gender
+        $maleFinalists = [];
+        $femaleFinalists = [];
+
+        foreach ($allCandidates as $candidate) {
+            // Calculate total score excluding Q&A
+            $totalScore = $candidate->getTotalScoreExcludingQA();
+            
+            $candidateData = [
+                'id' => $candidate->id,
+                'candidate_number' => $candidate->candidate_number,
+                'name' => $candidate->name,
+                'gender' => $candidate->gender,
+                'image_url' => $candidate->image_url ? asset($candidate->image_url) : null,
+                'total_score' => $totalScore,
+                'has_voted' => $candidate->scores()
+                    ->where('judge_id', $judge->id)
+                    ->where('category', $category)
+                    ->exists(),
+            ];
+
+            if ($candidate->gender === 'male') {
+                $maleFinalists[] = $candidateData;
+            } else {
+                $femaleFinalists[] = $candidateData;
+            }
+        }
+
+        // Sort by total score (descending) and take top 3 for each gender
+        usort($maleFinalists, function($a, $b) {
+            return $b['total_score'] <=> $a['total_score'];
+        });
+        
+        usort($femaleFinalists, function($a, $b) {
+            return $b['total_score'] <=> $a['total_score'];
+        });
+
+        // Take top 3 from each gender
+        $top3Males = array_slice($maleFinalists, 0, 3);
+        $top3Females = array_slice($femaleFinalists, 0, 3);
+
+        // Combine and sort by candidate number for consistent display
+        $finalists = array_merge($top3Males, $top3Females);
+        usort($finalists, function($a, $b) {
+            return $a['candidate_number'] <=> $b['candidate_number'];
+        });
+
+        // Remove total_score from final output (it was only needed for sorting)
+        $finalists = array_map(function($candidate) {
+            unset($candidate['total_score']);
+            return $candidate;
+        }, $finalists);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'candidates' => $finalists,
+                'category' => $category,
+                'progress' => $judge->getJudgingProgress($category),
+                'is_qa_finals' => true,
+                'message' => 'Showing top 3 male and top 3 female finalists for Q&A round'
             ]
         ]);
     }
