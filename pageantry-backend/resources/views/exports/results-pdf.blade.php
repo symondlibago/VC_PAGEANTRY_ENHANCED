@@ -139,8 +139,6 @@
                 <th>Production</th>
                 <th>Headdress</th>
                 <th>Sports Attire</th>
-                <th>Casual Attire</th>
-                <th>Opening Speech</th>
                 <th>Swimsuit</th>
                 <th>Gown</th>
                 <th>Total Score</th>
@@ -161,8 +159,6 @@
                     <td class="score">{{ number_format($result['production'], 2) }}</td>
                     <td class="score">{{ number_format($result['headress'], 2) }}</td>
                     <td class="score">{{ number_format($result['sports_attire'], 2) }}</td>
-                    <td class="score">{{ number_format($result['casual_attire'], 2) }}</td>
-                    <td class="score">{{ number_format($result['opening_speech'], 2) }}</td>
                     <td class="score">{{ number_format($result['swimsuit'], 2) }}</td>
                     <td class="score">{{ number_format($result['gown'], 2) }}</td>
                     <td class="score">{{ number_format($result['overall_total'], 2) }}</td>

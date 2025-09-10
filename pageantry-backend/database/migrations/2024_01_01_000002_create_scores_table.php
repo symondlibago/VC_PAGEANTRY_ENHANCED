@@ -19,8 +19,6 @@ return new class extends Migration
             'production',
             'headress',
             'sports_attire',
-            'casual_attire', 
-            'opening_speech', 
             'swimsuit',
             'gown', 
             'qa']);

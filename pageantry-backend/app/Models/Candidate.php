@@ -48,8 +48,6 @@ class Candidate extends Model
         $production = $this->getAverageScore('production');
         $headress = $this->getAverageScore('headress');
         $sportsAttire = $this->getAverageScore('sports_attire');
-        $casualAttire = $this->getAverageScore('casual_attire');
-        $openingSpeech = $this->getAverageScore('opening_speech');
         $swimsuit = $this->getAverageScore('swimsuit');
         $gown = $this->getAverageScore('gown');
 
@@ -57,12 +55,10 @@ class Candidate extends Model
         if ($production > 0) $categoriesCount++;
         if ($headress > 0) $categoriesCount++;
         if ($sportsAttire > 0) $categoriesCount++;
-        if ($casualAttire > 0) $categoriesCount++;
-        if ($openingSpeech > 0) $categoriesCount++;
         if ($swimsuit > 0) $categoriesCount++;
         if ($gown > 0) $categoriesCount++;
 
-        return $categoriesCount > 0 ? ($production + $headress + $sportsAttire + $casualAttire + $openingSpeech + $swimsuit + $gown) / $categoriesCount : 0;
+        return $categoriesCount > 0 ? ($production + $headress + $sportsAttire + $swimsuit + $gown) / $categoriesCount : 0;
     }
 
     /**
@@ -73,8 +69,6 @@ class Candidate extends Model
         $production = $this->getAverageScore('production');
         $headress = $this->getAverageScore('headress');
         $sportsAttire = $this->getAverageScore('sports_attire');
-        $casualAttire = $this->getAverageScore('casual_attire');
-        $openingSpeech = $this->getAverageScore('opening_speech');
         $swimsuit = $this->getAverageScore('swimsuit');
         $gown = $this->getAverageScore('gown');
 
@@ -94,14 +88,7 @@ class Candidate extends Model
             $categoriesCount++;
             $totalScore += $sportsAttire;
         }
-        if ($casualAttire > 0) {
-            $categoriesCount++;
-            $totalScore += $casualAttire;
-        }
-        if ($openingSpeech > 0) {
-            $categoriesCount++;
-            $totalScore += $openingSpeech;
-        }
+
         if ($swimsuit > 0) {
             $categoriesCount++;
             $totalScore += $swimsuit;
@@ -123,8 +110,6 @@ class Candidate extends Model
             'production' => $this->getAverageScore('production'),
             'headress' => $this->getAverageScore('headress'),
             'sports_attire' => $this->getAverageScore('sports_attire'),
-            'casual_attire' => $this->getAverageScore('casual_attire'),
-            'opening_speech' => $this->getAverageScore('opening_speech'),
             'swimsuit' => $this->getAverageScore('swimsuit'),
             'gown' => $this->getAverageScore('gown'),
             'qa' => $this->getAverageScore('qa'),

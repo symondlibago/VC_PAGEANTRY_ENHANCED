@@ -39,11 +39,9 @@ const CategoryVotingPage = ({ category, onBack }) => {
   const [isQAFinals, setIsQAFinals] = useState(false);
 
   const categories = {
-    production: { name: 'Production', icon: Trophy, color: 'bg-blue-600' },
+    production: { name: 'Production / Causal Attire', icon: Trophy, color: 'bg-blue-600' },
     headress: { name: 'Headress', icon: Trophy, color: 'bg-blue-600' },
     sports_attire: { name: 'Sports Attire', icon: Trophy, color: 'bg-blue-600' },
-    casual_attire: { name: 'Casual Attire', icon: Trophy, color: 'bg-blue-600' },
-    opening_speech: { name: 'Opening Speech', icon: Trophy, color: 'bg-blue-600' },
     swimsuit: { name: 'Swimsuit', icon: Star, color: 'bg-red-600' },
     gown: { name: 'Gown', icon: Crown, color: 'bg-purple-600' },
     qa: { name: 'Q&A', icon: User, color: 'bg-green-600' },
@@ -67,19 +65,6 @@ const CategoryVotingPage = ({ category, onBack }) => {
       { key: 'creativity_orignality', name: 'Creativity & Originality', weight: 50, maxScore: 50 },
       { key: 'presentation_execution', name: 'Presentaion & Execution', weight: 30, maxScore: 30 },
       { key: 'confidence', name: 'Confidence/Personality & Impact', weight: 20, maxScore: 20 }
-    ],
-    casual_attire: [
-      { key: 'fit_sustainability', name: 'Fit & Sustainability', weight: 50, maxScore: 50 },
-      { key: 'poise_bearing', name: 'Poise & Bearing', weight: 20, maxScore: 20 },
-      { key: 'elegance_sophistication', name: 'Elegance & Sophistication', weight: 20, maxScore: 20 },
-      { key: 'confidence', name: 'Confidence', weight: 10, maxScore: 10 }
-    ],
-    opening_speech: [
-      { key: 'content_relevance', name: 'Content/Relevance', weight: 30, maxScore: 30 },
-      { key: 'communication_skills', name: 'Delivery Communication Skills', weight: 25, maxScore: 25 },
-      { key: 'stage_presence', name: 'Stage Presence Confidence', weight: 20, maxScore: 20 },
-      { key: 'poise_confidence', name: 'Poise, Confidence & Body Language', weight: 15, maxScore: 15 },
-      { key: 'Audience Impact', name: 'Audience Impact', weight: 10, maxScore: 10 }
     ],
     swimsuit: [
       { key: 'physique_fitness', name: 'Physique & Fitness', weight: 40, maxScore: 40 },
@@ -136,24 +121,30 @@ const CategoryVotingPage = ({ category, onBack }) => {
       setLoading(true);
       const response = await candidatesAPI.getForJudging(category);
       const data = response.data.data;
+      let sortedCandidates = data.candidates || [];
       
-      setCandidates(data.candidates || []);
+      if (['sports_attire', 'swimsuit', 'gown', 'qa'].includes(category)) {
+        sortedCandidates = [...sortedCandidates].sort((a, b) => {
+          if (a.gender !== b.gender) {
+            return a.gender === 'female' ? -1 : 1;
+          }
+          return a.candidate_number - b.candidate_number;
+        });
+      }
+      
+      setCandidates(sortedCandidates);
       setProgress(data.progress || {});
       setIsQAFinals(data.is_qa_finals || false);
       
-      // Set message if this is Q&A finals
       if (data.is_qa_finals && data.message) {
         setMessage(data.message);
       }
       
-      // Only set current index if there are candidates
-      if (data.candidates && data.candidates.length > 0) {
-        // Find first unvoted candidate
-        const unvotedIndex = data.candidates.findIndex(c => !c.has_voted);
+      if (sortedCandidates.length > 0) {
+        const unvotedIndex = sortedCandidates.findIndex(c => !c.has_voted);
         if (unvotedIndex !== -1) {
           setCurrentIndex(unvotedIndex);
         } else {
-          // All candidates voted, show first one
           setCurrentIndex(0);
         }
       } else {

@@ -100,8 +100,6 @@ const AdminDashboard = () => {
       'production': 'top_production',
       'headress': 'top_headress',
       'sports_attire': 'top_sports_attire',
-      'casual_attire': 'top_casual_attire',
-      'opening_speech': 'opening_speech',
       'swimsuit': 'top_swimsuit',
       'gown': 'top_gown',
       'qa': 'top_qa',
@@ -117,8 +115,6 @@ const AdminDashboard = () => {
       'production': 'Production Results',
       'headress': 'Headress Results',
       'sports_attire': 'Sports Attire Results',
-      'casual_attire': 'Casual Attire Results',
-      'opening_speech': 'Opening Speech Results',
       'swimsuit': 'Swimsuit Results',
       'gown': 'Gown Results',
       'qa': 'Q&A Results',
@@ -203,7 +199,7 @@ const AdminDashboard = () => {
 
   // Export all categories function
   const handleExportAll = async (format) => {
-    const categories = ['overall', 'production', 'headress', 'sports_attire', 'casual_attire', 'opening_speech', 'swimsuit', 'gown', 'qa'];
+    const categories = ['overall', 'production', 'headress', 'sports_attire', 'swimsuit', 'gown', 'qa'];
     setExportLoading(true);
     
     try {
@@ -505,7 +501,7 @@ const AdminDashboard = () => {
               <div className="text-2xl font-bold">
                 {progress ? Math.round(
                   Object.values(progress.categories_progress)
-                    .reduce((sum, cat) => sum + cat.percentage, 0) / 8
+                    .reduce((sum, cat) => sum + cat.percentage, 0) / 6
                 ) : 0}%
               </div>
               <p className="text-xs text-muted-foreground">
@@ -579,11 +575,9 @@ const AdminDashboard = () => {
                       <TableHead>Number</TableHead>
                       <TableHead>Name</TableHead>
                       <TableHead>Gender</TableHead>
-                      <TableHead>Production</TableHead>
+                      <TableHead>Production/Casual Attire</TableHead>
                       <TableHead>Headress</TableHead>
                       <TableHead>Sports Attire</TableHead>
-                      <TableHead>Casual Attire</TableHead>
-                      <TableHead>Opening Speech</TableHead>
                       <TableHead>Swimsuit</TableHead>
                       <TableHead>Gown</TableHead>
                       <TableHead>Q&A</TableHead>
@@ -619,12 +613,6 @@ const AdminDashboard = () => {
                         </TableCell>
                         <TableCell className={getScoreColor(candidate.scores?.sports_attire)}>
                           {formatScore(candidate.scores?.sports_attire)}
-                        </TableCell>
-                        <TableCell className={getScoreColor(candidate.scores?.casual_attire)}>
-                          {formatScore(candidate.scores?.casual_attire)}
-                        </TableCell>
-                        <TableCell className={getScoreColor(candidate.scores?.opening_speech)}>
-                          {formatScore(candidate.scores?.opening_speech)}
                         </TableCell>
                         <TableCell className={getScoreColor(candidate.scores?.swimsuit)}>
                           {formatScore(candidate.scores?.swimsuit)}
@@ -693,11 +681,9 @@ const AdminDashboard = () => {
                       <TableHead>Name</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Production</TableHead>
+                      <TableHead>Production/Casual Attire</TableHead>
                       <TableHead>Headress</TableHead>
                       <TableHead>Sports Attire</TableHead>
-                      <TableHead>Casual Attire</TableHead>
-                      <TableHead>Opening Speech</TableHead>
                       <TableHead>Swimsuit</TableHead>
                       <TableHead>Gown</TableHead>
                       <TableHead>Q&A</TableHead>
@@ -730,16 +716,6 @@ const AdminDashboard = () => {
                           <TableCell>
                             <div className="text-sm">
                               {judge.progress?.sports_attire?.percentage || 0}%
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="text-sm">
-                              {judge.progress?.casual_attire?.percentage || 0}%
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="text-sm">
-                              {judge.progress?.opening_speech?.percentage || 0}%
                             </div>
                           </TableCell>
                           <TableCell>
@@ -819,8 +795,6 @@ const AdminDashboard = () => {
                         <SelectItem value="production">Production</SelectItem>
                         <SelectItem value="headress">Headress</SelectItem>
                         <SelectItem value="sports_attire">Sports Attire</SelectItem>
-                        <SelectItem value="casual_attire">Casual Attire</SelectItem>
-                        <SelectItem value="opening_speech">Opening Speech</SelectItem>
                         <SelectItem value="swimsuit">Swimsuit</SelectItem>
                         <SelectItem value="gown">Gown</SelectItem>
                         <SelectItem value="qa">Q&A</SelectItem>
@@ -922,8 +896,6 @@ const AdminDashboard = () => {
                           <TableHead>Production</TableHead>
                           <TableHead>Headress</TableHead>
                           <TableHead>Sports Attire</TableHead>
-                          <TableHead>Casual Attire</TableHead>
-                          <TableHead>Opening Speech</TableHead>
                           <TableHead>Swimsuit</TableHead>
                           <TableHead>Gown</TableHead>
                           <TableHead>Q&A</TableHead>
@@ -988,8 +960,6 @@ const AdminDashboard = () => {
                             <TableCell className={getScoreColor(item.scores_breakdown?.production)}>{formatScore(item.scores_breakdown?.production)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.headress)}>{formatScore(item.scores_breakdown?.headress)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.sports_attire)}>{formatScore(item.scores_breakdown?.sports_attire)}</TableCell>
-                            <TableCell className={getScoreColor(item.scores_breakdown?.casual_attire)}>{formatScore(item.scores_breakdown?.casual_attire)}</TableCell>
-                            <TableCell className={getScoreColor(item.scores_breakdown?.opening_speech)}>{formatScore(item.scores_breakdown?.opening_speech)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.swimsuit)}>{formatScore(item.scores_breakdown?.swimsuit)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.gown)}>{formatScore(item.scores_breakdown?.gown)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.qa)}>{formatScore(item.scores_breakdown?.qa)}</TableCell>

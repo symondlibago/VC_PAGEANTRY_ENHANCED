@@ -37,7 +37,7 @@ const JudgeDashboard = () => {
   const categories = [
     {
       id: 'production',
-      name: 'Production',
+      name: 'Production / Causal Attire',
       icon: Film,
       color: 'from-yellow-600 to-yellow-800',
       bgColor: 'bg-yellow-600',
@@ -57,22 +57,6 @@ const JudgeDashboard = () => {
       icon: Volleyball,
       color: 'from-blue-600 to-blue-800',
       bgColor: 'bg-blue-600',
-      description: 'Athletic wear and fitness presentation'
-    },
-    {
-      id: 'casual_attire',
-      name: 'Casual Attire',
-      icon: Shirt,
-      color: 'from-orange-600 to-orange-800',
-      bgColor: 'bg-orange-600',
-      description: 'Athletic wear and fitness presentation'
-    },
-    {
-      id: 'opening_speech',
-      name: 'Opening Speech',
-      icon: MicVocal,
-      color: 'from-indigo-600 to-indigo-800',
-      bgColor: 'bg-indigo-600',
       description: 'Athletic wear and fitness presentation'
     },
     {
