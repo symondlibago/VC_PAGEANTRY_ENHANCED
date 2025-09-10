@@ -4,6 +4,7 @@ import axios from 'axios';
 // const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://192.168.137.1:8000/api';
 const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:8000/api';
 // const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://192.168.68.100:8000/api';
+// const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://192.168.68.104:8000/api';
 const REQUEST_TIMEOUT = 30000; // 30 seconds
 
 // Create axios instance with base configuration
@@ -16,7 +17,7 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor to add auth token  
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('auth_token');

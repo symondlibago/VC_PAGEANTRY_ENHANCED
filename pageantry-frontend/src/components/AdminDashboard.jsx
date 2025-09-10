@@ -1028,7 +1028,8 @@ const AdminDashboard = () => {
           isOpen={showAddJudgeModal}
           onClose={handleCloseJudgeModal}
           onSuccess={handleJudgeSuccess}
-          judge={editingJudge}
+          editJudge={editingJudge}
+          showSuccessAlert={showSuccess}
         />
       )}
 

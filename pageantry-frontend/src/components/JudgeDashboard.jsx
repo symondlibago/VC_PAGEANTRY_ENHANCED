@@ -109,13 +109,13 @@ const JudgeDashboard = () => {
   // Animation cycle effect
   useEffect(() => {
     const schoolName = "Vineyard International Polytechnic College";
-    const charDelay = 1; // seconds between each character
-    const animationDuration = 1; // seconds for each character animation
+    const charDelay = 0.02; // seconds between each character (reduced from 1)
+    const animationDuration = 0.5; // seconds for each character animation (reduced from 1)
     
     const assembleDuration = (schoolName.length * charDelay + animationDuration) * 1000; // Convert to milliseconds
-    const staticDuration = 7000; // 3 seconds static
+    const staticDuration = 2000; // 2 seconds static (reduced from 3)
     const disassembleDuration = (schoolName.length * charDelay + animationDuration) * 1000; // Convert to milliseconds
-    const pauseDuration = 2000; // 1 second pause before restarting
+    const pauseDuration = 500; // 0.5 second pause before restarting (reduced from 2)
     
     const runAnimationCycle = () => {
       // Start with assembly
@@ -246,8 +246,7 @@ const JudgeDashboard = () => {
       <header className="bg-gradient-to-r from-primary to-secondary backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
   <div className="container mx-auto px-4 py-4">
     <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-6">
-        {/* Two Logos - Vertically Aligned */}
+      <div className="flex items-center space-x-3">
         <div className="flex flex-col items-center space-y-2">
           <div className="w-12 h-12 rounded-full overflow-hidden bg-white flex items-center justify-center p-1">
             <img src={vcLogo} alt="VC Logo" className="w-full h-full object-contain" />
@@ -257,15 +256,15 @@ const JudgeDashboard = () => {
           </div>
         </div>
 
-        {/* Text Section - Centered */}
+        {/* Text Section */}
         <div className="flex flex-col justify-center">
-          <h1 className="text-2xl font-bold text-white text-center">Mr. and Ms. Panagbangi 2025</h1>
-          <p className="text-sm text-white/80 text-center">Welcome, {user?.name}</p>
-          <div className={`school-name-animation ${animationState} text-white text-l text-center`}>
+          <h1 className="text-2xl font-bold text-white">Mr. and Ms. Panagbangi 2025</h1>
+          <p className="text-sm text-white/80">Welcome, {user?.name}</p>
+          <div className={`school-name-animation ${animationState} text-white text-sm`}>
             {schoolName.split('').map((char, index) => {
               const totalChars = schoolName.length;
-              const assembleDelay = index * 0.05;
-              const disassembleDelay = index * 0.05; // Same order as assembly for reverse effect
+              const assembleDelay = index * 0.02;
+              const disassembleDelay = index * 0.02; // Same order as assembly for reverse effect
               
               return (
                 <span 
@@ -283,16 +282,7 @@ const JudgeDashboard = () => {
           </div>
         </div>
       </div>
-
-      {/* Logout Button */}
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={logout}
-        className="bg-transparent text-white border-white hover:bg-white hover:text-black cursor-pointer"
-      >
-        <LogOut className="h-4 w-4 mr-2" />
-      </Button>
+      
     </div>
   </div>
 </header>
@@ -415,6 +405,14 @@ const JudgeDashboard = () => {
             </div>
           </CardContent>
         </Card>
+        <Button
+        variant="outline"
+        size="sm"
+        onClick={logout}
+        className="bg-transparent text-white border-white hover:bg-white hover:text-black cursor-pointer"
+      >
+        <LogOut className="h-4 w-4 mr-2" />
+      </Button>
       </div>
     </div>
   );

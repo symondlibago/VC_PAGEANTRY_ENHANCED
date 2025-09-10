@@ -357,7 +357,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
                 {/* Candidate Photo */}
                 <div className="flex justify-center">
                   <div className="relative">
-                    <Avatar className="h-40 w-40 border-4 border-white/20">
+                    <Avatar className="h-60 w-45 border-4 border-white/20">
                       <AvatarImage src={currentCandidate.image_url} />
                       <AvatarFallback className="text-3xl bg-gradient-to-br from-blue-500 to-purple-600 text-white">
                         {currentCandidate.name.split(' ').map(n => n[0]).join('')}
