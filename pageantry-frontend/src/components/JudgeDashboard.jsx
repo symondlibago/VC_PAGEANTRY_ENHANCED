@@ -69,7 +69,7 @@ const JudgeDashboard = () => {
     },
     {
       id: 'gown',
-      name: 'Gown',
+      name: 'Formal Attire Exposure',
       icon: Crown,
       color: 'from-purple-600 to-purple-800',
       bgColor: 'bg-purple-600',

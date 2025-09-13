@@ -43,7 +43,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
     headress: { name: 'Headress', icon: Trophy, color: 'bg-blue-600' },
     sports_attire: { name: 'Sports Attire', icon: Trophy, color: 'bg-blue-600' },
     swimsuit: { name: 'Swimsuit', icon: Star, color: 'bg-red-600' },
-    gown: { name: 'Gown', icon: Crown, color: 'bg-purple-600' },
+    gown: { name: 'Formal Attire Exposure', icon: Crown, color: 'bg-purple-600' },
     qa: { name: 'Q&A', icon: User, color: 'bg-green-600' },
   };
 
@@ -292,13 +292,9 @@ const CategoryVotingPage = ({ category, onBack }) => {
                 className="text-white hover:bg-white/10"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back
               </Button>
-              <div className={`w-10 h-10 ${currentCategory.color} rounded-full flex items-center justify-center`}>
-                <currentCategory.icon className="h-5 w-5 text-white" />
-              </div>
               <div>
-                <h1 className="text-xl font-bold text-white">
+                <h1 className="text-l font-bold text-white">
                   {currentCategory.name} {isQAFinals ? 'Finals' : 'Voting'}
                 </h1>
                 <p className="text-sm text-blue-200">Judge: {user?.name}</p>
@@ -372,10 +368,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
                   <Badge variant="outline" className="mb-3 border-white/20 text-white">
                     {isQAFinals ? 'Finalist' : 'Candidate'} #{currentCandidate.candidate_number}
                   </Badge>
-                  <h2 className="text-4xl font-bold mb-2 text-white">{currentCandidate.name}</h2>
-                  <p className="text-xl text-blue-200">
-                    {currentCategory.name} {isQAFinals ? 'Finals' : 'Category'}
-                  </p>
+                  <h2 className="text-2xl font-bold mb-2 text-white">{currentCandidate.name}</h2>
                   {isQAFinals && (
                     <p className="text-sm text-yellow-200 mt-2">
                       🏆 Qualified as Top 3 {currentCandidate.gender === 'male' ? 'Male' : 'Female'}

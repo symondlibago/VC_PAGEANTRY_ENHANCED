@@ -579,7 +579,7 @@ const AdminDashboard = () => {
                       <TableHead>Headress</TableHead>
                       <TableHead>Sports Attire</TableHead>
                       <TableHead>Swimsuit</TableHead>
-                      <TableHead>Gown</TableHead>
+                      <TableHead>Formal Attire Exposure</TableHead>
                       <TableHead>Q&A</TableHead>
                       <TableHead>Total</TableHead>
                       <TableHead>Actions</TableHead>
@@ -685,7 +685,7 @@ const AdminDashboard = () => {
                       <TableHead>Headress</TableHead>
                       <TableHead>Sports Attire</TableHead>
                       <TableHead>Swimsuit</TableHead>
-                      <TableHead>Gown</TableHead>
+                      <TableHead>Formal Attire EXposure</TableHead>
                       <TableHead>Q&A</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
@@ -792,7 +792,7 @@ const AdminDashboard = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="overall">Overall</SelectItem>
-                        <SelectItem value="production">Production</SelectItem>
+                        <SelectItem value="production">Production / Casual Attire</SelectItem>
                         <SelectItem value="headress">Headress</SelectItem>
                         <SelectItem value="sports_attire">Sports Attire</SelectItem>
                         <SelectItem value="swimsuit">Swimsuit</SelectItem>
