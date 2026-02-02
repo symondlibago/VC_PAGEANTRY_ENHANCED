@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // Environment configuration
-const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://192.168.137.1:8000/api';
-// const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:8000/api';
+// const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://192.168.137.1:8000/api';
+const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://localhost:8000/api';
 // const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://192.168.68.100:8000/api';
 // const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || 'http://192.168.68.104:8000/api';
 const REQUEST_TIMEOUT = 30000; // 30 seconds

@@ -39,10 +39,10 @@ const CategoryVotingPage = ({ category, onBack }) => {
   const [isQAFinals, setIsQAFinals] = useState(false);
 
   const categories = {
-    production: { name: 'Production / Causal Attire', icon: Trophy, color: 'bg-blue-600' },
-    headress: { name: 'Headress', icon: Trophy, color: 'bg-blue-600' },
-    sports_attire: { name: 'Sports Attire', icon: Trophy, color: 'bg-blue-600' },
-    swimsuit: { name: 'Swimsuit', icon: Star, color: 'bg-red-600' },
+    production: { name: 'Production', icon: Trophy, color: 'bg-blue-600' },
+    formal_attire: { name: 'Formal Attire / Casual Attire', icon: Trophy, color: 'bg-blue-600' },
+    uniform_attire: { name: 'Uniform Attire', icon: Trophy, color: 'bg-blue-600' },
+    ethnic_attire: { name: 'Ethnic Attire', icon: Star, color: 'bg-red-600' },
     gown: { name: 'Formal Attire Exposure', icon: Crown, color: 'bg-purple-600' },
     qa: { name: 'Q&A', icon: User, color: 'bg-green-600' },
   };
@@ -55,22 +55,22 @@ const CategoryVotingPage = ({ category, onBack }) => {
       { key: 'creativity_concept', name: 'Creativity & Concept', weight: 20, maxScore: 20 },
       { key: 'confidence', name: 'Confidence', weight: 15, maxScore: 15 }
     ],
-    headress: [
-      { key: 'consistency', name: 'Consistency with The Pageant Theme', weight: 35, maxScore: 35 },
-      { key: 'creativity', name: 'Creativity & Originality', weight: 30, maxScore: 30 },
-      { key: 'materials', name: 'Materials, Weight & Size', weight: 20, maxScore: 20 },
-      { key: 'overall', name: 'Overall Aesthetic Appeal & Craftsmanship', weight: 15, maxScore: 15 }
-    ],
-    sports_attire: [
-      { key: 'creativity_orignality', name: 'Creativity & Originality', weight: 50, maxScore: 50 },
-      { key: 'presentation_execution', name: 'Presentaion & Execution', weight: 30, maxScore: 30 },
-      { key: 'confidence', name: 'Confidence/Personality & Impact', weight: 20, maxScore: 20 }
-    ],
-    swimsuit: [
-      { key: 'physique_fitness', name: 'Physique & Fitness', weight: 40, maxScore: 40 },
-      { key: 'poise_bearing', name: 'Poise & Bearing', weight: 25, maxScore: 25 },
-      { key: 'swimsuit_fit', name: 'Swimsuit Fit & Style', weight: 25, maxScore: 25 },
+    formal_attire: [
+      { key: 'fit', name: 'Fit & Sustainability', weight: 50, maxScore: 50 },
+      { key: 'poise', name: 'Poise & Bearing', weight: 20, maxScore: 20 },
+      { key: 'elegance', name: 'Elegance & Sophistication', weight: 20, maxScore: 20 },
       { key: 'confidence', name: 'Confidence', weight: 10, maxScore: 10 }
+    ],
+    uniform_attire: [
+      { key: 'school_uniform', name: 'Appropriateness in Wearing School Uniform', weight: 50, maxScore: 50 },
+      { key: 'poise_projection', name: 'Poise & Projection', weight: 40, maxScore: 40 },
+      { key: 'confidence', name: 'Confidence', weight: 10, maxScore: 10 }
+    ],
+    ethnic_attire: [
+      { key: 'cultural_relevance', name: 'Cultural Relevance & Authenticity', weight: 30, maxScore: 30 },
+      { key: 'creativity_originality', name: 'Creativity & Originality', weight: 25, maxScore: 25 },
+      { key: 'stage_presence', name: 'Stage Presence & Poise', weight: 25, maxScore: 25 },
+      { key: 'ability', name: 'Ability to Balance Traditional and Modern Elements', weight: 20, maxScore: 20 }
     ],
     gown: [
       { key: 'elegance_style', name: 'Elegance & Style', weight: 40, maxScore: 40 },
@@ -123,7 +123,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
       const data = response.data.data;
       let sortedCandidates = data.candidates || [];
       
-      if (['sports_attire', 'swimsuit', 'gown', 'qa'].includes(category)) {
+      if (['uniform_attire', 'ethnic_attire', 'gown', 'qa'].includes(category)) {
         sortedCandidates = [...sortedCandidates].sort((a, b) => {
           if (a.gender !== b.gender) {
             return a.gender === 'female' ? -1 : 1;

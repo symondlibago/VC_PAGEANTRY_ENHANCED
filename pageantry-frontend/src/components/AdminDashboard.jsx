@@ -98,9 +98,9 @@ const AdminDashboard = () => {
     const filterMapping = {
       'overall': 'overall',
       'production': 'top_production',
-      'headress': 'top_headress',
-      'sports_attire': 'top_sports_attire',
-      'swimsuit': 'top_swimsuit',
+      'formal_attire': 'top_formal_attire',
+      'uniform_attire': 'top_uniform_attire',
+      'ethnic_attire': 'top_ethnic_attire',
       'gown': 'top_gown',
       'qa': 'top_qa',
       'combined_categories': 'combined_categories'
@@ -113,9 +113,9 @@ const AdminDashboard = () => {
     const displayNames = {
       'overall': 'Overall Results',
       'production': 'Production Results',
-      'headress': 'Headress Results',
-      'sports_attire': 'Sports Attire Results',
-      'swimsuit': 'Swimsuit Results',
+      'formal_attire': 'Formal Attire Results',
+      'uniform_attire': 'Uniform Attire Results',
+      'ethnic_attire': 'Ethnic Attire Results',
       'gown': 'Gown Results',
       'qa': 'Q&A Results',
       'combined_categories': 'Combined Categories Results'
@@ -199,7 +199,7 @@ const AdminDashboard = () => {
 
   // Export all categories function
   const handleExportAll = async (format) => {
-    const categories = ['overall', 'production', 'headress', 'sports_attire', 'swimsuit', 'gown', 'qa'];
+    const categories = ['overall', 'production', 'formal_attire', 'uniform_attire', 'ethnic_attire', 'gown', 'qa'];
     setExportLoading(true);
     
     try {
@@ -575,11 +575,11 @@ const AdminDashboard = () => {
                       <TableHead>Number</TableHead>
                       <TableHead>Name</TableHead>
                       <TableHead>Gender</TableHead>
-                      <TableHead>Production/Casual Attire</TableHead>
-                      <TableHead>Headress</TableHead>
-                      <TableHead>Sports Attire</TableHead>
-                      <TableHead>Swimsuit</TableHead>
-                      <TableHead>Formal Attire Exposure</TableHead>
+                      <TableHead>Production</TableHead>
+                      <TableHead>Formal Attire</TableHead>
+                      <TableHead>Uniform Attire</TableHead>
+                      <TableHead>Ethnic Attire</TableHead>
+                      <TableHead>Formal Attire EXposure</TableHead>
                       <TableHead>Q&A</TableHead>
                       <TableHead>Total</TableHead>
                       <TableHead>Actions</TableHead>
@@ -608,14 +608,14 @@ const AdminDashboard = () => {
                         <TableCell className={getScoreColor(candidate.scores?.production)}>
                           {formatScore(candidate.scores?.production)}
                         </TableCell>
-                        <TableCell className={getScoreColor(candidate.scores?.headress)}>
-                          {formatScore(candidate.scores?.headress)}
+                        <TableCell className={getScoreColor(candidate.scores?.formal_attire)}>
+                          {formatScore(candidate.scores?.formal_attire)}
                         </TableCell>
-                        <TableCell className={getScoreColor(candidate.scores?.sports_attire)}>
-                          {formatScore(candidate.scores?.sports_attire)}
+                        <TableCell className={getScoreColor(candidate.scores?.uniform_attire)}>
+                          {formatScore(candidate.scores?.uniform_attire)}
                         </TableCell>
-                        <TableCell className={getScoreColor(candidate.scores?.swimsuit)}>
-                          {formatScore(candidate.scores?.swimsuit)}
+                        <TableCell className={getScoreColor(candidate.scores?.ethnic_attire)}>
+                          {formatScore(candidate.scores?.ethnic_attire)}
                         </TableCell>
                         <TableCell className={getScoreColor(candidate.scores?.gown)}>
                           {formatScore(candidate.scores?.gown)}
@@ -681,10 +681,10 @@ const AdminDashboard = () => {
                       <TableHead>Name</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Production/Casual Attire</TableHead>
-                      <TableHead>Headress</TableHead>
-                      <TableHead>Sports Attire</TableHead>
-                      <TableHead>Swimsuit</TableHead>
+                      <TableHead>Production</TableHead>
+                      <TableHead>Formal Attire</TableHead>
+                      <TableHead>Uniform Attire</TableHead>
+                      <TableHead>Ethnic Attire</TableHead>
                       <TableHead>Formal Attire EXposure</TableHead>
                       <TableHead>Q&A</TableHead>
                       <TableHead>Actions</TableHead>
@@ -710,17 +710,17 @@ const AdminDashboard = () => {
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
-                              {judge.progress?.headress?.percentage || 0}%
+                              {judge.progress?.formal_attire?.percentage || 0}%
                             </div>
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
-                              {judge.progress?.sports_attire?.percentage || 0}%
+                              {judge.progress?.uniform_attire?.percentage || 0}%
                             </div>
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
-                              {judge.progress?.swimsuit?.percentage || 0}%
+                              {judge.progress?.ethnic_attire?.percentage || 0}%
                             </div>
                           </TableCell>
                           <TableCell>
@@ -793,9 +793,9 @@ const AdminDashboard = () => {
                       <SelectContent>
                         <SelectItem value="overall">Overall</SelectItem>
                         <SelectItem value="production">Production / Casual Attire</SelectItem>
-                        <SelectItem value="headress">Headress</SelectItem>
-                        <SelectItem value="sports_attire">Sports Attire</SelectItem>
-                        <SelectItem value="swimsuit">Swimsuit</SelectItem>
+                        <SelectItem value="formal_attire">Formal Attire</SelectItem>
+                        <SelectItem value="uniform_attire">Uniform Attire</SelectItem>
+                        <SelectItem value="ethnic_attire">Ethnic Attire</SelectItem>
                         <SelectItem value="gown">Gown</SelectItem>
                         <SelectItem value="qa">Q&A</SelectItem>
                       </SelectContent>
@@ -894,9 +894,9 @@ const AdminDashboard = () => {
                       {filter === 'overall' ? (
                         <>
                           <TableHead>Production</TableHead>
-                          <TableHead>Headress</TableHead>
-                          <TableHead>Sports Attire</TableHead>
-                          <TableHead>Swimsuit</TableHead>
+                          <TableHead>Formal Attire</TableHead>
+                          <TableHead>Uniform Attire</TableHead>
+                          <TableHead>Ethnic Attire</TableHead>
                           <TableHead>Gown</TableHead>
                           <TableHead>Q&A</TableHead>
                           <TableHead>Total</TableHead>
@@ -958,9 +958,9 @@ const AdminDashboard = () => {
                         {filter === 'overall' ? (
                           <>
                             <TableCell className={getScoreColor(item.scores_breakdown?.production)}>{formatScore(item.scores_breakdown?.production)}</TableCell>
-                            <TableCell className={getScoreColor(item.scores_breakdown?.headress)}>{formatScore(item.scores_breakdown?.headress)}</TableCell>
-                            <TableCell className={getScoreColor(item.scores_breakdown?.sports_attire)}>{formatScore(item.scores_breakdown?.sports_attire)}</TableCell>
-                            <TableCell className={getScoreColor(item.scores_breakdown?.swimsuit)}>{formatScore(item.scores_breakdown?.swimsuit)}</TableCell>
+                            <TableCell className={getScoreColor(item.scores_breakdown?.formal_attire)}>{formatScore(item.scores_breakdown?.formal_attire)}</TableCell>
+                            <TableCell className={getScoreColor(item.scores_breakdown?.uniform_attire)}>{formatScore(item.scores_breakdown?.uniform_attire)}</TableCell>
+                            <TableCell className={getScoreColor(item.scores_breakdown?.ethnic_attire)}>{formatScore(item.scores_breakdown?.ethnic_attire)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.gown)}>{formatScore(item.scores_breakdown?.gown)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.qa)}>{formatScore(item.scores_breakdown?.qa)}</TableCell>
                             <TableCell className={`font-bold ${getScoreColor(item.overall_total)}`}>

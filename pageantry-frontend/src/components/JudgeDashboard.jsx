@@ -44,24 +44,24 @@ const JudgeDashboard = () => {
       description: 'Athletic wear and fitness presentation'
     },
     {
-      id: 'headress',
-      name: 'Headress',
+      id: 'formal_attire',
+      name: 'Formal Attire',
       icon: Crown,
       color: 'from-pink-600 to-pink-800',
       bgColor: 'bg-pink-600',
       description: 'Athletic wear and fitness presentation'
     },
     {
-      id: 'sports_attire',
-      name: 'Sports Attire',
-      icon: Volleyball,
+      id: 'uniform_attire',
+      name: 'Uniform Attire',
+      icon: Crown,
       color: 'from-blue-600 to-blue-800',
       bgColor: 'bg-blue-600',
       description: 'Athletic wear and fitness presentation'
     },
     {
-      id: 'swimsuit',
-      name: 'Swimsuit',
+      id: 'ethnic_attire',
+      name: 'Ethnic Attire',
       icon: Waves,
       color: 'from-red-600 to-red-800',
       bgColor: 'bg-red-600',
@@ -242,7 +242,7 @@ const JudgeDashboard = () => {
 
         {/* Text Section */}
         <div className="flex flex-col justify-center">
-          <h1 className="text-2xl font-bold text-white">Mr. and Ms. Panagbangi 2025</h1>
+          <h1 className="text-2xl font-bold text-white">Mr. and Ms. Vineyard 2026</h1>
           <p className="text-sm text-white/80">Welcome, {user?.name}</p>
           <div className={`school-name-animation ${animationState} text-white text-sm`}>
             {schoolName.split('').map((char, index) => {
@@ -393,7 +393,7 @@ const JudgeDashboard = () => {
         variant="outline"
         size="sm"
         onClick={logout}
-        className="bg-transparent text-white border-white hover:bg-white hover:text-black cursor-pointer"
+        className="bg-white border-black border-2 text-black cursor-pointer"
       >
         <LogOut className="h-4 w-4 mr-2" />
       </Button>

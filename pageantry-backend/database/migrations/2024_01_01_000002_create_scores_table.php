@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('candidate_id')->constrained('candidates')->onDelete('cascade');
             $table->enum('category', [
             'production',
-            'headress',
-            'sports_attire',
-            'swimsuit',
+            'formal_attire',
+            'uniform_attire',
+            'ethnic_attire',
             'gown', 
             'qa']);
             $table->decimal('score', 5, 2); // Max 999.99

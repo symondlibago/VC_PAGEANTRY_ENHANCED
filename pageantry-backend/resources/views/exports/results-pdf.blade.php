@@ -157,9 +157,9 @@
                 <td>{{ $result['candidate']->name }}</td>
                 @if($filter === 'overall')
                     <td class="score">{{ number_format($result['production'], 2) }}</td>
-                    <td class="score">{{ number_format($result['headress'], 2) }}</td>
-                    <td class="score">{{ number_format($result['sports_attire'], 2) }}</td>
-                    <td class="score">{{ number_format($result['swimsuit'], 2) }}</td>
+                    <td class="score">{{ number_format($result['formal_attire'], 2) }}</td>
+                    <td class="score">{{ number_format($result['uniform_attire'], 2) }}</td>
+                    <td class="score">{{ number_format($result['ethnic_attire'], 2) }}</td>
                     <td class="score">{{ number_format($result['gown'], 2) }}</td>
                     <td class="score">{{ number_format($result['overall_total'], 2) }}</td>
                 @else
