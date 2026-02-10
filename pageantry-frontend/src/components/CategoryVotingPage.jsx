@@ -44,6 +44,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
     uniform_attire: { name: 'Uniform Attire', icon: Trophy, color: 'bg-blue-600' },
     ethnic_attire: { name: 'Ethnic Attire', icon: Star, color: 'bg-red-600' },
     gown: { name: 'Formal Attire Exposure', icon: Crown, color: 'bg-purple-600' },
+    qa_preliminary: { name: 'Preliminary Q&A', icon: Clock, color: 'bg-yellow-600' },
     qa: { name: 'Q&A', icon: User, color: 'bg-green-600' },
   };
 
@@ -77,6 +78,12 @@ const CategoryVotingPage = ({ category, onBack }) => {
       { key: 'poise_bearing', name: 'Poise & Bearing ', weight: 20, maxScore: 20 },
       { key: 'style_design', name: 'Style & Design', weight: 20, maxScore: 20 },
       { key: 'confidence', name: 'Confidence', weight: 20, maxScore: 20 }
+    ],
+    qa_preliminary: [
+      { key: 'wit_content', name: 'Wit and Content', weight: 40, maxScore: 40 },
+      { key: 'confidece', name: 'Confidence and Delivery', weight: 30, maxScore: 30 },
+      { key: 'stage_presence', name: 'Stage Presence', weight: 20, maxScore: 20 },
+      { key: 'overall_impact', name: 'Overall Impact', weight: 10, maxScore: 10 }
     ],
     qa: [
       { key: 'intelligence_articulateness', name: 'Intelligence & Articulateness', weight: 60, maxScore: 60 },
@@ -123,7 +130,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
       const data = response.data.data;
       let sortedCandidates = data.candidates || [];
       
-      if (['uniform_attire', 'ethnic_attire', 'gown', 'qa'].includes(category)) {
+      if (['uniform_attire', 'ethnic_attire', 'gown', 'qa_preliminary', 'qa'].includes(category)) {
         sortedCandidates = [...sortedCandidates].sort((a, b) => {
           if (a.gender !== b.gender) {
             return a.gender === 'female' ? -1 : 1;

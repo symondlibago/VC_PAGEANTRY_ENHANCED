@@ -76,6 +76,14 @@ const JudgeDashboard = () => {
       description: 'Evening gown elegance and poise'
     },
     {
+      id: 'qa_preliminary',
+      name: 'Preliminary Q&A',
+      icon: Clock,
+      color: 'from-yellow-600 to-yellow-800',
+      bgColor: 'bg-yellow-600',
+      description: 'Question and answer intelligence'
+    },
+    {
       id: 'qa',
       name: 'Q&A',
       icon: User,

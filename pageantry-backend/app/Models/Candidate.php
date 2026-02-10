@@ -50,6 +50,7 @@ class Candidate extends Model
         $uniform_attire = $this->getAverageScore('uniform_attire');
         $ethnic_attire = $this->getAverageScore('ethnic_attire');
         $gown = $this->getAverageScore('gown');
+        $qa_preliminary = $this->getAverageScore('qa_preliminary');
 
         $categoriesCount = 0;
         if ($production > 0) $categoriesCount++;
@@ -57,8 +58,9 @@ class Candidate extends Model
         if ($uniform_attire > 0) $categoriesCount++;
         if ($ethnic_attire > 0) $categoriesCount++;
         if ($gown > 0) $categoriesCount++;
+        if ($qa_preliminary > 0) $categoriesCount++;
 
-        return $categoriesCount > 0 ? ($production + $formal_attire + $uniform_attire + $ethnic_attire + $gown) / $categoriesCount : 0;
+        return $categoriesCount > 0 ? ($production + $formal_attire + $uniform_attire + $ethnic_attire + $gown + $qa_preliminary) / $categoriesCount : 0;   
     }
 
     /**
@@ -71,6 +73,7 @@ class Candidate extends Model
         $uniform_attire = $this->getAverageScore('uniform_attire');
         $ethnic_attire = $this->getAverageScore('ethnic_attire');
         $gown = $this->getAverageScore('gown');
+        $qa_preliminary = $this->getAverageScore('qa_preliminary');
 
         // Count only categories that have scores (excluding Q&A)
         $categoriesCount = 0;
@@ -98,6 +101,11 @@ class Candidate extends Model
             $totalScore += $gown;
         }
 
+        if ($qa_preliminary > 0) {
+            $categoriesCount++;
+            $totalScore += $qa_preliminary;
+        }
+
         return $categoriesCount > 0 ? $totalScore / $categoriesCount : 0;
     }
 
@@ -112,6 +120,7 @@ class Candidate extends Model
             'uniform_attire' => $this->getAverageScore('uniform_attire'),
             'ethnic_attire' => $this->getAverageScore('ethnic_attire'),
             'gown' => $this->getAverageScore('gown'),
+            'qa_preliminary' => $this->getAverageScore('qa_preliminary'),
             'qa' => $this->getAverageScore('qa'),
             'overall_total' => $this->getTotalScore()
         ];

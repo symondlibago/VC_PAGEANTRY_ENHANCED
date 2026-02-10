@@ -21,6 +21,7 @@ return new class extends Migration
             'uniform_attire',
             'ethnic_attire',
             'gown', 
+            'qa_preliminary', 
             'qa']);
             $table->decimal('score', 5, 2); // Max 999.99
             $table->timestamps();
