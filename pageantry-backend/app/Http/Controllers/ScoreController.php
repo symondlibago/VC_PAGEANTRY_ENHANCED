@@ -50,7 +50,7 @@ class ScoreController extends Controller
         // Validate input
         $validated = $request->validate([
             'candidate_id' => 'required|exists:candidates,id',
-            'category' => 'required|in:production,formal_attire,uniform_attire,ethnic_attire,gown,qa_preliminary,qa',
+            'category' => 'required|in:production,formal_attire,uniform_attire,swimwear,gown,qa_preliminary,qa',
             'score' => 'required|numeric|min:0|max:100',
         ]);
 
@@ -245,7 +245,7 @@ class ScoreController extends Controller
      */
     public function progress(): JsonResponse
     {
-        $categories = ['production', 'formal_attire', 'uniform_attire', 'ethnic_attire', 'gown', 'qa_preliminary', 'qa'];
+        $categories = ['production', 'formal_attire', 'uniform_attire', 'swimwear', 'gown', 'qa_preliminary', 'qa'];
         $totalCandidates = Candidate::where('is_active', true)->count();
         $totalJudges = \App\Models\User::where('role', 'judge')
             ->where('is_active', true)

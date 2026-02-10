@@ -118,7 +118,7 @@
         <img src="{{ public_path('images/panagbangi_logo.jpg') }}" alt="Panagbangi Logo">
     </div>
     <div class="school-name">Vineyard International Polytechnic College</div>
-    <div class="pageant-name">Mr. and Ms. Panagbangi 2025</div>
+    <div class="pageant-name">Mr. and Ms. Vineyard 2026</div>
     <h1>Pageantry Tabulation System</h1>
     <p>{{ $title }}</p>
 </div>
@@ -159,7 +159,7 @@
                     <td class="score">{{ number_format($result['production'], 2) }}</td>
                     <td class="score">{{ number_format($result['formal_attire'], 2) }}</td>
                     <td class="score">{{ number_format($result['uniform_attire'], 2) }}</td>
-                    <td class="score">{{ number_format($result['ethnic_attire'], 2) }}</td>
+                    <td class="score">{{ number_format($result['swimwear'], 2) }}</td>
                     <td class="score">{{ number_format($result['gown'], 2) }}</td>
                     <td class="score">{{ number_format($result['overall_total'], 2) }}</td>
                 @else

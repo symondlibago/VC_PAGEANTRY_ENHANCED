@@ -48,7 +48,7 @@ class Candidate extends Model
         $production = $this->getAverageScore('production');
         $formal_attire = $this->getAverageScore('formal_attire');
         $uniform_attire = $this->getAverageScore('uniform_attire');
-        $ethnic_attire = $this->getAverageScore('ethnic_attire');
+        $swimwear = $this->getAverageScore('swimwear');
         $gown = $this->getAverageScore('gown');
         $qa_preliminary = $this->getAverageScore('qa_preliminary');
 
@@ -56,11 +56,11 @@ class Candidate extends Model
         if ($production > 0) $categoriesCount++;
         if ($formal_attire > 0) $categoriesCount++;
         if ($uniform_attire > 0) $categoriesCount++;
-        if ($ethnic_attire > 0) $categoriesCount++;
+        if ($swimwear > 0) $categoriesCount++;
         if ($gown > 0) $categoriesCount++;
         if ($qa_preliminary > 0) $categoriesCount++;
 
-        return $categoriesCount > 0 ? ($production + $formal_attire + $uniform_attire + $ethnic_attire + $gown + $qa_preliminary) / $categoriesCount : 0;   
+        return $categoriesCount > 0 ? ($production + $formal_attire + $uniform_attire + $swimwear + $gown + $qa_preliminary) / $categoriesCount : 0;   
     }
 
     /**
@@ -71,7 +71,7 @@ class Candidate extends Model
         $production = $this->getAverageScore('production');
         $formal_attire = $this->getAverageScore('formal_attire');
         $uniform_attire = $this->getAverageScore('uniform_attire');
-        $ethnic_attire = $this->getAverageScore('ethnic_attire');
+        $swimwear = $this->getAverageScore('swimwear');
         $gown = $this->getAverageScore('gown');
         $qa_preliminary = $this->getAverageScore('qa_preliminary');
 
@@ -92,9 +92,9 @@ class Candidate extends Model
             $totalScore += $uniform_attire;
         }
 
-        if ($ethnic_attire > 0) {
+        if ($swimwear > 0) {
             $categoriesCount++;
-            $totalScore += $ethnic_attire;
+            $totalScore += $swimwear;
         }
         if ($gown > 0) {
             $categoriesCount++;
@@ -118,7 +118,7 @@ class Candidate extends Model
             'production' => $this->getAverageScore('production'),
             'formal_attire' => $this->getAverageScore('formal_attire'),
             'uniform_attire' => $this->getAverageScore('uniform_attire'),
-            'ethnic_attire' => $this->getAverageScore('ethnic_attire'),
+            'swimwear' => $this->getAverageScore('swimwear'),
             'gown' => $this->getAverageScore('gown'),
             'qa_preliminary' => $this->getAverageScore('qa_preliminary'),
             'qa' => $this->getAverageScore('qa'),

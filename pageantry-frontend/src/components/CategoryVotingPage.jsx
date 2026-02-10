@@ -40,11 +40,11 @@ const CategoryVotingPage = ({ category, onBack }) => {
 
   const categories = {
     production: { name: 'Production', icon: Trophy, color: 'bg-blue-600' },
-    formal_attire: { name: 'Formal Attire / Casual Attire', icon: Trophy, color: 'bg-blue-600' },
+    formal_attire: { name: 'Casual Attire', icon: Trophy, color: 'bg-blue-600' },
     uniform_attire: { name: 'Uniform Attire', icon: Trophy, color: 'bg-blue-600' },
-    ethnic_attire: { name: 'Ethnic Attire', icon: Star, color: 'bg-red-600' },
-    gown: { name: 'Formal Attire Exposure', icon: Crown, color: 'bg-purple-600' },
     qa_preliminary: { name: 'Preliminary Q&A', icon: Clock, color: 'bg-yellow-600' },
+    swimwear: { name: 'Swimwear', icon: Trophy, color: 'bg-red-600' },
+    gown: { name: 'Gown/Formal Attire Exposure', icon: Crown, color: 'bg-purple-600' },
     qa: { name: 'Q&A', icon: User, color: 'bg-green-600' },
   };
 
@@ -67,23 +67,23 @@ const CategoryVotingPage = ({ category, onBack }) => {
       { key: 'poise_projection', name: 'Poise & Projection', weight: 40, maxScore: 40 },
       { key: 'confidence', name: 'Confidence', weight: 10, maxScore: 10 }
     ],
-    ethnic_attire: [
-      { key: 'cultural_relevance', name: 'Cultural Relevance & Authenticity', weight: 30, maxScore: 30 },
-      { key: 'creativity_originality', name: 'Creativity & Originality', weight: 25, maxScore: 25 },
-      { key: 'stage_presence', name: 'Stage Presence & Poise', weight: 25, maxScore: 25 },
-      { key: 'ability', name: 'Ability to Balance Traditional and Modern Elements', weight: 20, maxScore: 20 }
+    qa_preliminary: [
+      { key: 'wit_content', name: 'Wit and Content', weight: 40, maxScore: 40 },
+      { key: 'confidece', name: 'Confidence and Delivery', weight: 30, maxScore: 30 },
+      { key: 'stage_presence', name: 'Stage Presence', weight: 20, maxScore: 20 },
+      { key: 'overall_impact', name: 'Overall Impact', weight: 10, maxScore: 10 }
+    ],
+    swimwear: [
+      { key: 'physical_fitness', name: 'Physical Fitness', weight: 30, maxScore: 30 },
+      { key: 'confidence_presence', name: 'Confidence & Presence', weight: 30, maxScore: 30 },
+      { key: 'swimwear_fit', name: 'Swimwear Fit', weight: 25, maxScore: 25 },
+      { key: 'stage_presence', name: 'Stage Presence', weight: 15, maxScore: 15 }
     ],
     gown: [
       { key: 'elegance_style', name: 'Elegance & Style', weight: 40, maxScore: 40 },
       { key: 'poise_bearing', name: 'Poise & Bearing ', weight: 20, maxScore: 20 },
       { key: 'style_design', name: 'Style & Design', weight: 20, maxScore: 20 },
       { key: 'confidence', name: 'Confidence', weight: 20, maxScore: 20 }
-    ],
-    qa_preliminary: [
-      { key: 'wit_content', name: 'Wit and Content', weight: 40, maxScore: 40 },
-      { key: 'confidece', name: 'Confidence and Delivery', weight: 30, maxScore: 30 },
-      { key: 'stage_presence', name: 'Stage Presence', weight: 20, maxScore: 20 },
-      { key: 'overall_impact', name: 'Overall Impact', weight: 10, maxScore: 10 }
     ],
     qa: [
       { key: 'intelligence_articulateness', name: 'Intelligence & Articulateness', weight: 60, maxScore: 60 },
@@ -128,14 +128,55 @@ const CategoryVotingPage = ({ category, onBack }) => {
       setLoading(true);
       const response = await candidatesAPI.getForJudging(category);
       const data = response.data.data;
-      let sortedCandidates = data.candidates || [];
       
-      if (['uniform_attire', 'ethnic_attire', 'gown', 'qa_preliminary', 'qa'].includes(category)) {
-        sortedCandidates = [...sortedCandidates].sort((a, b) => {
+      // Create a shallow copy to avoid mutating state directly before setting it
+      let sortedCandidates = [...(data.candidates || [])];
+
+      // 1. Grouped: All Female first, then All Male
+      // Applies to: production, qa
+      if (['production'].includes(category)) {
+        sortedCandidates.sort((a, b) => {
+          // Sort by Gender first (Female < Male)
           if (a.gender !== b.gender) {
             return a.gender === 'female' ? -1 : 1;
           }
+          // Then by Candidate Number
           return a.candidate_number - b.candidate_number;
+        });
+      }
+
+     else if (['qa'].includes(category)) {
+        sortedCandidates.sort((a, b) => {
+          // Sort by Gender first (Male > Female)
+          if (a.gender !== b.gender) {
+            return a.gender === 'male' ? -1 : 1;
+          }
+          // Then by Candidate Number
+          return a.candidate_number - b.candidate_number;
+        });
+      }
+      
+      // 2. Interleaved: Female first, then Male (F1, M1, F2, M2...)
+      // Applies to: formal_attire, swimwear, qa_preliminary
+      else if (['formal_attire', 'qa_preliminary', 'swimwear', 'gown'].includes(category)) {
+        sortedCandidates.sort((a, b) => {
+          // Sort by Candidate Number first
+          if (a.candidate_number !== b.candidate_number) {
+            return a.candidate_number - b.candidate_number;
+          }
+          // If numbers match, Female comes first
+          return a.gender === 'female' ? -1 : 1;
+        });
+      }
+      
+      else if (['uniform_attire'].includes(category)) {
+        sortedCandidates.sort((a, b) => {
+          // Sort by Candidate Number first
+          if (a.candidate_number !== b.candidate_number) {
+            return a.candidate_number - b.candidate_number;
+          }
+          // If numbers match, Male comes first
+          return a.gender === 'male' ? -1 : 1;
         });
       }
       
@@ -148,6 +189,7 @@ const CategoryVotingPage = ({ category, onBack }) => {
       }
       
       if (sortedCandidates.length > 0) {
+        // Find the first candidate that hasn't been voted on yet
         const unvotedIndex = sortedCandidates.findIndex(c => !c.has_voted);
         if (unvotedIndex !== -1) {
           setCurrentIndex(unvotedIndex);

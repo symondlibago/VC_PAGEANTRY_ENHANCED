@@ -100,9 +100,9 @@ const AdminDashboard = () => {
       'production': 'top_production',
       'formal_attire': 'top_formal_attire',
       'uniform_attire': 'top_uniform_attire',
-      'ethnic_attire': 'top_ethnic_attire',
-      'gown': 'top_gown',
       'qa_preliminary': 'top_qa_preliminary',
+      'swimwear': 'top_swimwear',
+      'gown': 'top_gown',
       'qa': 'top_qa',
       'combined_categories': 'combined_categories'
     };
@@ -114,11 +114,11 @@ const AdminDashboard = () => {
     const displayNames = {
       'overall': 'Overall Results',
       'production': 'Production Results',
-      'formal_attire': 'Formal Attire Results',
+      'formal_attire': 'Casual Attire Results',
       'uniform_attire': 'Uniform Attire Results',
-      'ethnic_attire': 'Ethnic Attire Results',
-      'gown': 'Gown Results',
       'qa_preliminary': 'Preliminary Q&A Results',
+      'swimwear': 'Swimwear Results',
+      'gown': 'Gown Results',
       'qa': 'Q&A Results',
       'combined_categories': 'Combined Categories Results'
     };
@@ -201,7 +201,7 @@ const AdminDashboard = () => {
 
   // Export all categories function
   const handleExportAll = async (format) => {
-    const categories = ['overall', 'production', 'formal_attire', 'uniform_attire', 'ethnic_attire', 'gown', 'qa_preliminary', 'qa'];
+    const categories = ['overall', 'production', 'formal_attire', 'uniform_attire', 'qa_preliminary', 'swimwear', 'gown', 'qa'];
     setExportLoading(true);
     
     try {
@@ -503,7 +503,7 @@ const AdminDashboard = () => {
               <div className="text-2xl font-bold">
                 {progress ? Math.round(
                   Object.values(progress.categories_progress)
-                    .reduce((sum, cat) => sum + cat.percentage, 0) / 6
+                    .reduce((sum, cat) => sum + cat.percentage, 0) / 7
                 ) : 0}%
               </div>
               <p className="text-xs text-muted-foreground">
@@ -578,11 +578,11 @@ const AdminDashboard = () => {
                       <TableHead>Name</TableHead>
                       <TableHead>Gender</TableHead>
                       <TableHead>Production</TableHead>
-                      <TableHead>Formal Attire</TableHead>
+                      <TableHead>Casual Attire</TableHead>
                       <TableHead>Uniform Attire</TableHead>
-                      <TableHead>Ethnic Attire</TableHead>
-                      <TableHead>Formal Attire EXposure</TableHead>
                       <TableHead>Q&A Preliminary</TableHead>
+                      <TableHead>Swimwear</TableHead>
+                      <TableHead>Gown/Formal Attire Exposure</TableHead>
                       <TableHead>Q&A</TableHead>
                       <TableHead>Total</TableHead>
                       <TableHead>Actions</TableHead>
@@ -617,14 +617,14 @@ const AdminDashboard = () => {
                         <TableCell className={getScoreColor(candidate.scores?.uniform_attire)}>
                           {formatScore(candidate.scores?.uniform_attire)}
                         </TableCell>
-                        <TableCell className={getScoreColor(candidate.scores?.ethnic_attire)}>
-                          {formatScore(candidate.scores?.ethnic_attire)}
+                        <TableCell className={getScoreColor(candidate.scores?.qa_preliminary)}>
+                          {formatScore(candidate.scores?.qa_preliminary)}
+                        </TableCell>
+                        <TableCell className={getScoreColor(candidate.scores?.swimwear)}>
+                          {formatScore(candidate.scores?.swimwear)}
                         </TableCell>
                         <TableCell className={getScoreColor(candidate.scores?.gown)}>
                           {formatScore(candidate.scores?.gown)}
-                        </TableCell>
-                        <TableCell className={getScoreColor(candidate.scores?.qa_preliminary)}>
-                          {formatScore(candidate.scores?.qa_preliminary)}
                         </TableCell>
                         <TableCell className={getScoreColor(candidate.scores?.qa)}>
                           {formatScore(candidate.scores?.qa)}
@@ -688,11 +688,11 @@ const AdminDashboard = () => {
                       <TableHead>Email</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Production</TableHead>
-                      <TableHead>Formal Attire</TableHead>
+                      <TableHead>Casual Attire</TableHead>
                       <TableHead>Uniform Attire</TableHead>
-                      <TableHead>Ethnic Attire</TableHead>
-                      <TableHead>Formal Attire EXposure</TableHead>
                       <TableHead>Q&A Preliminary</TableHead>
+                      <TableHead>Swimwear</TableHead>
+                      <TableHead>Gown/Formal Attire Exposure</TableHead>
                       <TableHead>Q&A</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
@@ -727,17 +727,17 @@ const AdminDashboard = () => {
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
-                              {judge.progress?.ethnic_attire?.percentage || 0}%
+                              {judge.progress?.qa_preliminary?.percentage || 0}%
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-sm">
+                              {judge.progress?.swimwear?.percentage || 0}%
                             </div>
                           </TableCell>
                           <TableCell>
                             <div className="text-sm">
                               {judge.progress?.gown?.percentage || 0}%
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="text-sm">
-                              {judge.progress?.qa_preliminary?.percentage || 0}%
                             </div>
                           </TableCell>
                           <TableCell>
@@ -804,12 +804,12 @@ const AdminDashboard = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="overall">Overall</SelectItem>
-                        <SelectItem value="production">Production / Casual Attire</SelectItem>
-                        <SelectItem value="formal_attire">Formal Attire</SelectItem>
+                        <SelectItem value="production">Production</SelectItem>
+                        <SelectItem value="formal_attire">Casual Attire</SelectItem>
                         <SelectItem value="uniform_attire">Uniform Attire</SelectItem>
-                        <SelectItem value="ethnic_attire">Ethnic Attire</SelectItem>
-                        <SelectItem value="gown">Gown</SelectItem>
                         <SelectItem value="qa_preliminary">Q&A Preliminary</SelectItem>
+                        <SelectItem value="swimwear">Swimwear</SelectItem>
+                        <SelectItem value="gown">Gown/Formal Attire</SelectItem>
                         <SelectItem value="qa">Q&A</SelectItem>
                       </SelectContent>
                     </Select>
@@ -907,11 +907,11 @@ const AdminDashboard = () => {
                       {filter === 'overall' ? (
                         <>
                           <TableHead>Production</TableHead>
-                          <TableHead>Formal Attire</TableHead>
+                          <TableHead>Casual Attire</TableHead>
                           <TableHead>Uniform Attire</TableHead>
-                          <TableHead>Ethnic Attire</TableHead>
-                          <TableHead>Gown</TableHead>
                           <TableHead>Q&A Preliminary</TableHead>
+                          <TableHead>Swimwear</TableHead>
+                          <TableHead>Gown/Formal Attire</TableHead>
                           <TableHead>Q&A</TableHead>
                           <TableHead>Total</TableHead>
                         </>
@@ -974,9 +974,9 @@ const AdminDashboard = () => {
                             <TableCell className={getScoreColor(item.scores_breakdown?.production)}>{formatScore(item.scores_breakdown?.production)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.formal_attire)}>{formatScore(item.scores_breakdown?.formal_attire)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.uniform_attire)}>{formatScore(item.scores_breakdown?.uniform_attire)}</TableCell>
-                            <TableCell className={getScoreColor(item.scores_breakdown?.ethnic_attire)}>{formatScore(item.scores_breakdown?.ethnic_attire)}</TableCell>
-                            <TableCell className={getScoreColor(item.scores_breakdown?.gown)}>{formatScore(item.scores_breakdown?.gown)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.qa_preliminary)}>{formatScore(item.scores_breakdown?.qa_preliminary)}</TableCell>
+                            <TableCell className={getScoreColor(item.scores_breakdown?.swimwear)}>{formatScore(item.scores_breakdown?.swimwear)}</TableCell>
+                            <TableCell className={getScoreColor(item.scores_breakdown?.gown)}>{formatScore(item.scores_breakdown?.gown)}</TableCell>
                             <TableCell className={getScoreColor(item.scores_breakdown?.qa)}>{formatScore(item.scores_breakdown?.qa)}</TableCell>
                             <TableCell className={`font-bold ${getScoreColor(item.overall_total)}`}>
                               {formatScore(item.overall_total)}

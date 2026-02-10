@@ -19,7 +19,7 @@ return new class extends Migration
             'production',
             'formal_attire',
             'uniform_attire',
-            'ethnic_attire',
+            'swimwear',
             'gown', 
             'qa_preliminary', 
             'qa']);

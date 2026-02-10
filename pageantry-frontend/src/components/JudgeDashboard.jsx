@@ -45,7 +45,7 @@ const JudgeDashboard = () => {
     },
     {
       id: 'formal_attire',
-      name: 'Formal Attire',
+      name: 'Casual Attire',
       icon: Crown,
       color: 'from-pink-600 to-pink-800',
       bgColor: 'bg-pink-600',
@@ -60,8 +60,16 @@ const JudgeDashboard = () => {
       description: 'Athletic wear and fitness presentation'
     },
     {
-      id: 'ethnic_attire',
-      name: 'Ethnic Attire',
+      id: 'qa_preliminary',
+      name: 'Preliminary Q&A',
+      icon: Clock,
+      color: 'from-yellow-600 to-yellow-800',
+      bgColor: 'bg-yellow-600',
+      description: 'Question and answer intelligence'
+    },
+    {
+      id: 'swimwear',
+      name: 'Swimwear',
       icon: Waves,
       color: 'from-red-600 to-red-800',
       bgColor: 'bg-red-600',
@@ -69,19 +77,11 @@ const JudgeDashboard = () => {
     },
     {
       id: 'gown',
-      name: 'Formal Attire Exposure',
+      name: 'Gown/Formal Attire Exposure',
       icon: Crown,
       color: 'from-purple-600 to-purple-800',
       bgColor: 'bg-purple-600',
       description: 'Evening gown elegance and poise'
-    },
-    {
-      id: 'qa_preliminary',
-      name: 'Preliminary Q&A',
-      icon: Clock,
-      color: 'from-yellow-600 to-yellow-800',
-      bgColor: 'bg-yellow-600',
-      description: 'Question and answer intelligence'
     },
     {
       id: 'qa',
